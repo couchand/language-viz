@@ -8,11 +8,11 @@ margin = 100
 x_column = "cpu(s)"
 y_column = "mem(KB)"
 
-x = d3.scale.linear()
-    .range [0, w]
+x = d3.scale.sqrt()
+    .rangeRound [0, w]
 
-y = d3.scale.linear()
-    .range [h, 0]
+y = d3.scale.sqrt()
+    .rangeRound [h, 0]
 
 d3.csv "languages.csv", (data) ->
   for d in data
