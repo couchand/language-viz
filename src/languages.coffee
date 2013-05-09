@@ -15,6 +15,10 @@ y = d3.scale.linear()
     .range [h, 0]
 
 d3.csv "languages.csv", (data) ->
+  for d in data
+    d[x_column] = parseFloat d[x_column]
+    d[y_column] = parseFloat d[y_column]
+
   x.domain d3.extent data, (d) -> d[x_column]
   y.domain d3.extent data, (d) -> d[y_column]
   x.nice()
