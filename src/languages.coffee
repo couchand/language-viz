@@ -25,14 +25,12 @@ d3.csv "languages.csv", (data) ->
   y.nice()
 
   svg = d3.select("#viz").append("svg")
-    .attr("width", w + 2*margin)
-    .attr("height", h + 2*margin)
+    .attr("width", w + margin + margin)
+    .attr("height", h + margin + margin)
     .append("g")
-    .attr "transform", "translate(#{margin},#{margin})"
+    .attr("transform", "translate(#{margin},#{margin})")
 
-  focus = svg.append("g")
-
-  dots = focus.selectAll(".dot")
+  dots = svg.selectAll(".dot")
     .data(data)
     .enter().append("circle")
     .classed("dot", -> yes)
