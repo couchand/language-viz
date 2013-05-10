@@ -11,8 +11,6 @@ title_f = 10
 
 row_count = 6
 
-selected_lang = "Scala"
-
 x_column = "cpu(s)"
 y_column = "size(B)"
 
