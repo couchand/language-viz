@@ -119,13 +119,14 @@ d3.csv "languages.csv", (data) ->
 
   averages = average.map data
 
-  flat_averages = []
-  for lang, avg of averages
+  flatten = (lang, avg) ->
     m = {}
     m.lang = lang
     setX m, getX(avg)
     setY m, getY(avg)
-    flat_averages.push m
+    m
+
+  flat_averages = (flatten lang, avg for lang, avg of averages)
 
   layout = languagesByXThenY flat_averages
 
