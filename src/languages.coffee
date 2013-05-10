@@ -1,6 +1,6 @@
 # language visualizations
 
-w = 300
+w = 200
 h = 200
 
 margin = 100
@@ -67,7 +67,16 @@ d3.csv "languages.csv", (data) ->
     .append("g")
     .attr("transform", "translate(#{margin},#{margin})")
 
-  benchmark = svg.selectAll(".benchmark")
+  clip = svg.append("defs").append("clipPath")
+    .attr("id", "clip")
+    .append("rect")
+    .attr("width", w)
+    .attr("height", h)
+
+  focus = svg.append("g")
+    .attr("clip-path", "url(#clip)")
+
+  benchmark = focus.selectAll(".benchmark")
     .data(data)
     .enter().append("g")
     .classed("benchmark", -> yes)
