@@ -64,21 +64,17 @@ types = {
 type = (d) ->
   types[d.lang]
 
-average = d3.nest()
-  .key((d) -> d.lang)
-  .rollup (v) ->
-    m = {}
-    m[x_column] = d3.mean v, getX
-    m[y_column] = d3.mean v, getY
-    m
+rollup = (k, f) ->
+  d3.nest()
+    .key((d) -> d[k])
+    .rollup (v) ->
+      m = {}
+      m[x_column] = d3[f] v, getX
+      m[y_column] = d3[f] v, getY
+      m
 
-best = d3.nest()
-  .key((d) -> d.name)
-  .rollup (v) ->
-    m = {}
-    m[x_column] = d3.min v, getX
-    m[y_column] = d3.min v, getY
-    m
+average = rollup 'lang', 'mean'
+best = rollup 'name', 'min'
 
 byLanguage = d3.nest()
   .key((d) -> d.lang)
