@@ -80,10 +80,23 @@ d3.csv "languages.csv", (data) ->
     .attr("opacity", .6)
 
   lines = benchmark.append("path")
-    .attr("stroke", (d) -> if d.lang is selected_lang then "#555" else "none")
     .attr("opacity", .6)
     .attr "d", (d) ->
       avg = averages[d.lang]
       cx = getX0(avg) - getX0(d)
       cy = getY0(avg) - getY0(d)
       "M 0 0 L #{cx} #{cy}"
+
+  update = ->
+    lines.attr "stroke", (d) ->
+      if d.lang is selected_lang then "#555" else "none"
+
+  update()
+
+  langs = d3.select("body").append("ul").selectAll("li")
+    .data((a for a of averages))
+    .enter().append("li")
+    .text((d) -> d)
+    .on "mouseover", (d) ->
+      selected_lang = d
+      update()
