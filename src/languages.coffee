@@ -1,9 +1,9 @@
 # language visualizations
 
-w = 200
-h = 200
+w = 150
+h = 150
 
-margin = 100
+margin = 10
 
 selected_lang = "Scala"
 
@@ -101,6 +101,12 @@ d3.csv "languages.csv", (data) ->
       if d.lang is selected_lang then "#555" else "none"
 
   update()
+
+  focus.append("rect")
+    .attr("width", w)
+    .attr("height", h)
+    .attr("stroke", "#444")
+    .attr("fill", "none")
 
   langs = d3.select("body").append("ul").selectAll("li")
     .data((a for a of averages))
