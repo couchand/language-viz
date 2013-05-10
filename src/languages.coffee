@@ -114,7 +114,7 @@ rect = (c, s, f) ->
     .attr("stroke", s)
     .attr("fill", f)
 
-d3.csv "languages.csv", (data) ->
+d3.csv "data.csv", (data) ->
   for d in data
     setX d, parseFloat getX d
     setY d, parseFloat getY d
