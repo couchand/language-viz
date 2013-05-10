@@ -29,17 +29,19 @@ getX0 = (d) -> x getX d
 getY0 = (d) -> y getY d
 
 background = d3.scale.ordinal()
-    .domain(['lambda', 'c', 'other'])
-    .range(['#ae9', '#9cf', '#bbb'])
+    .domain(['imperative', 'oo', 'functional', 'scripting'])
+    .range(['#6da', '#97e', '#fe7', '#fa7'])
 
 type = (d) ->
   switch d.lang
-    when 'C gcc', 'C++ g++'
-      'c'
-    when 'ATS', 'OCaml', 'Lua', 'F# Mono', 'Erlang HiPE', 'Scala', 'Smalltalk VisualWorks', 'Lisp SBCL', 'Haskell GHC'
-      'labmda'
-    else
-      'other'
+    when 'C gcc', 'Pascal Free Pascal', 'Go', 'Fortran Intel'
+      'imperative'
+    when 'C++ g++', 'Scala', 'Smalltalk VisualWorks', 'Ada 2005 GNAT', 'Java 7', 'C# Mono', 'Dart'
+      'oo'
+    when 'ATS', 'OCaml', 'F# Mono', 'Erlang HiPE', 'Lisp SBCL', 'Haskell GHC', 'Clojure', 'Racket'
+      'functional'
+    when 'Lua', 'PHP', 'Python 3', 'Ruby 2.0', 'JavaScript V8', 'Ruby JRuby', 'Perl'
+      'scripting'
 
 average = d3.nest()
   .key((d) -> d.lang)
@@ -153,7 +155,6 @@ d3.csv "languages.csv", (data) ->
   lines = star.selectAll("path")
     .data((d) -> lang_benches[d.lang])
     .enter().append("path")
-    .attr("opacity", .6)
     .attr("stroke", "#555")
     .attr "d", (d) ->
       avg = averages[d.lang]
