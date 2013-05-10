@@ -165,9 +165,8 @@ d3.csv "languages.csv", (data) ->
 
   clip = svg.append("defs").append("clipPath")
     .attr("id", "clip")
-    .append("rect")
-    .attr("width", w)
-    .attr("height", h)
+
+  rect clip, "none", "none"
 
   focus = svg.append("g")
     .attr("clip-path", "url(#clip)")
