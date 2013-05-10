@@ -17,6 +17,9 @@ y_column = "size(B)"
 getX = (d) -> d[x_column]
 getY = (d) -> d[y_column]
 
+setX = (d, x) -> d[x_column] = x
+setY = (d, y) -> d[y_column] = y
+
 x = d3.scale.sqrt()
     .rangeRound [0, w]
 
@@ -67,8 +70,8 @@ rollup = (k, f) ->
     .key((d) -> d[k])
     .rollup (v) ->
       m = {}
-      m[x_column] = d3[f] v, getX
-      m[y_column] = d3[f] v, getY
+      setX m, d3[f] v, getX
+      setY m, d3[f] v, getY
       m
 
 average = rollup 'lang', 'mean'
@@ -92,14 +95,14 @@ languagesByXThenY = (a) ->
 
 d3.csv "languages.csv", (data) ->
   for d in data
-    d[x_column] = parseFloat d[x_column]
-    d[y_column] = parseFloat d[y_column]
+    setX d, parseFloat getX d
+    setY d, parseFloat getY d
 
   mins = best.map data
 
   for d in data
-    d[x_column] = getX(d) / getX(mins[d.name])
-    d[y_column] = getY(d) / getY(mins[d.name])
+    setX d, getX(d) / getX(mins[d.name])
+    setY d, getY(d) / getY(mins[d.name])
 
   x.domain [0, 5000]
   y.domain [1, 6]
@@ -115,8 +118,8 @@ d3.csv "languages.csv", (data) ->
   for lang, avg of averages
     m = {}
     m.lang = lang
-    m[x_column] = getX(avg)
-    m[y_column] = getY(avg)
+    setX m, getX(avg)
+    setY m, getY(avg)
     flat_averages.push m
 
   layout = languagesByXThenY flat_averages
