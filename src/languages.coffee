@@ -98,6 +98,13 @@ languagesByXThenY = (a) ->
   cols = matrixValues cols
   matrixValues (languagesByY.entries col for col in cols)
 
+flatten = (lang, avg) ->
+  m = {}
+  m.lang = lang
+  setX m, getX avg
+  setY m, getY avg
+  m
+
 d3.csv "languages.csv", (data) ->
   for d in data
     setX d, parseFloat getX d
@@ -118,13 +125,6 @@ d3.csv "languages.csv", (data) ->
   #y.nice()
 
   averages = average.map data
-
-  flatten = (lang, avg) ->
-    m = {}
-    m.lang = lang
-    setX m, getX(avg)
-    setY m, getY(avg)
-    m
 
   flat_averages = (flatten lang, avg for lang, avg of averages)
 
