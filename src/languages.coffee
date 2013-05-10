@@ -88,13 +88,16 @@ languagesByY = d3.nest()
   .key(getY)
   .sortKeys((a,b) -> d3.descending parseFloat(a), parseFloat(b))
 
+matrixValues = (cols) ->
+  ((cell.values[0] for cell in col) for col in cols)
+
 languagesByXThenY = (a) ->
   byX = languagesByX.entries a
   end = (i) -> Math.min byX.length - 1, i + row_count
   cols = (byX.slice i, end i for i in [0..byX.length] by row_count)
-  cols = ((cell.values[0] for cell in col) for col in cols)
+  cols = matrixValues cols
   cols = (languagesByY.entries col for col in cols)
-  ((cell.values[0] for cell in col) for col in cols)
+  matrixValues cols
 
 d3.csv "languages.csv", (data) ->
   for d in data
