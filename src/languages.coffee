@@ -27,6 +27,19 @@ y = d3.scale.sqrt()
 getX0 = (d) -> x getX d
 getY0 = (d) -> y getY d
 
+background = d3.scale.ordinal()
+    .domain(['lambda', 'c', 'other'])
+    .range(['#ae9', '#9cf', '#bbb'])
+
+type = (d) ->
+  switch d.lang
+    when 'C gcc', 'C++ g++'
+      'c'
+    when 'ATS', 'OCaml', 'Lua', 'F# Mono', 'Erland HiPE', 'Scala', 'Smalltalk VisualWorks', 'Lisp SBCL', 'Haskell GHC'
+      'labmda'
+    else
+      'other'
+
 average = d3.nest()
   .key((d) -> d.lang)
   .rollup (v) ->
@@ -123,6 +136,12 @@ d3.csv "languages.csv", (data) ->
 
   focus = svg.append("g")
     .attr("clip-path", "url(#clip)")
+
+  focus.append("rect")
+    .attr("width", w)
+    .attr("height", h)
+    .attr("stroke", "none")
+    .attr("fill", (d) -> background type d)
 
   star = focus.append("g")
     .classed("star", -> yes)
