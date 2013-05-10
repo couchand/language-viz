@@ -51,7 +51,7 @@ languagesByX = d3.nest()
 
 languagesByY = d3.nest()
   .key(getY)
-  .sortKeys((a,b) -> d3.ascending parseFloat(a), parseFloat(b))
+  .sortKeys((a,b) -> d3.descending parseFloat(a), parseFloat(b))
 
 languagesByXThenY = (a) ->
   byX = languagesByX.entries a
