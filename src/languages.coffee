@@ -32,16 +32,37 @@ background = d3.scale.ordinal()
     .domain(['imperative', 'oo', 'functional', 'scripting'])
     .range(['#6da', '#97e', '#fe7', '#fa7'])
 
+types = {
+  'C gcc': 'imperative'
+  'Pascal Free Pascal': 'imperative'
+  'Go': 'imperative'
+  'Fortran Intel': 'imperative'
+  'C++ g++': 'oo'
+  'Scala': 'oo'
+  'Smalltalk VisualWorks': 'oo'
+  'Ada 2005 GNAT': 'oo'
+  'Java 7': 'oo'
+  'C# Mono': 'oo'
+  'Dart': 'oo'
+  'ATS': 'functional'
+  'OCaml': 'functional'
+  'F# Mono': 'functional'
+  'Erlang HiPE': 'functional'
+  'Lisp SBCL': 'functional'
+  'Haskell GHC': 'functional'
+  'Clojure': 'functional'
+  'Racket': 'functional'
+  'Lua': 'scripting'
+  'PHP': 'scripting'
+  'Python 3': 'scripting'
+  'Ruby 2.0': 'scripting'
+  'JavaScript V8': 'scripting'
+  'Ruby JRuby': 'scripting'
+  'Perl': 'scripting'
+}
+
 type = (d) ->
-  switch d.lang
-    when 'C gcc', 'Pascal Free Pascal', 'Go', 'Fortran Intel'
-      'imperative'
-    when 'C++ g++', 'Scala', 'Smalltalk VisualWorks', 'Ada 2005 GNAT', 'Java 7', 'C# Mono', 'Dart'
-      'oo'
-    when 'ATS', 'OCaml', 'F# Mono', 'Erlang HiPE', 'Lisp SBCL', 'Haskell GHC', 'Clojure', 'Racket'
-      'functional'
-    when 'Lua', 'PHP', 'Python 3', 'Ruby 2.0', 'JavaScript V8', 'Ruby JRuby', 'Perl'
-      'scripting'
+  types[d.lang]
 
 average = d3.nest()
   .key((d) -> d.lang)
