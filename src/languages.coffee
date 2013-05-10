@@ -9,7 +9,7 @@ margin_h = 10
 title_h = 15
 title_f = 10
 
-row_count = 6
+row_count = 5
 
 x_column = "cpu(s)"
 y_column = "size(B)"
