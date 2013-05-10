@@ -14,6 +14,8 @@ row_count = 5
 x_column = "cpu(s)"
 y_column = "size(B)"
 
+lang = (d) -> d.lang
+
 getX = (d) -> d[x_column]
 getY = (d) -> d[y_column]
 
@@ -63,7 +65,7 @@ types = {
 }
 
 type = (d) ->
-  types[d.lang]
+  background types[d.lang]
 
 rollup = (k, f) ->
   d3.nest()
@@ -78,7 +80,7 @@ average = rollup 'lang', 'mean'
 best = rollup 'name', 'min'
 
 byLanguage = d3.nest()
-  .key((d) -> d.lang)
+  .key(lang)
 
 languagesByX = d3.nest()
   .key(getX)
@@ -127,7 +129,6 @@ d3.csv "languages.csv", (data) ->
   averages = average.map data
 
   flat_averages = (flatten lang, avg for lang, avg of averages)
-
   layout = languagesByXThenY flat_averages
 
   lang_benches = byLanguage.map data
@@ -146,14 +147,14 @@ d3.csv "languages.csv", (data) ->
     .attr("transform", "translate(#{margin_w},#{margin_h + title_h})")
 
   svg.append("title")
-    .text (d) -> d.lang
+    .text lang
 
   svg.append("text")
     .attr("x", w/2)
     .attr("y", -4)
     .style("font-size", title_f)
     .attr("text-anchor", "middle")
-    .text (d) -> d.lang
+    .text lang
 
   clip = svg.append("defs").append("clipPath")
     .attr("id", "clip")
@@ -168,7 +169,7 @@ d3.csv "languages.csv", (data) ->
     .attr("width", w)
     .attr("height", h)
     .attr("stroke", "none")
-    .attr("fill", (d) -> background type d)
+    .attr("fill", type)
 
   star = focus.append("g")
     .classed("star", -> yes)
