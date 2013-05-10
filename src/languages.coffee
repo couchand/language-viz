@@ -36,7 +36,7 @@ type = (d) ->
   switch d.lang
     when 'C gcc', 'C++ g++'
       'c'
-    when 'ATS', 'OCaml', 'Lua', 'F# Mono', 'Erland HiPE', 'Scala', 'Smalltalk VisualWorks', 'Lisp SBCL', 'Haskell GHC'
+    when 'ATS', 'OCaml', 'Lua', 'F# Mono', 'Erlang HiPE', 'Scala', 'Smalltalk VisualWorks', 'Lisp SBCL', 'Haskell GHC'
       'labmda'
     else
       'other'
