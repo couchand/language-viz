@@ -51,10 +51,13 @@ d3.csv "languages.csv", (data) ->
     d[x_column] = getX(d) / getX(mins[d.name])
     d[y_column] = getY(d) / getY(mins[d.name])
 
-  x.domain d3.extent data, getX
-  y.domain d3.extent data, getY
-  x.nice()
-  y.nice()
+  x.domain [0, 5000]
+  y.domain [1, 6]
+
+  #x.domain d3.extent data, getX
+  #y.domain d3.extent data, getY
+  #x.nice()
+  #y.nice()
 
   averages = average.map data
 
