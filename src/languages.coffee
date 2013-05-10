@@ -7,6 +7,7 @@ margin_w = 40
 margin_h = 10
 
 title_h = 15
+title_f = 10
 
 row_count = 6
 
@@ -124,7 +125,7 @@ d3.csv "languages.csv", (data) ->
   svg.append("text")
     .attr("x", w/2)
     .attr("y", -4)
-    .style("font-size", title_h - 2)
+    .style("font-size", title_f)
     .attr("text-anchor", "middle")
     .text (d) -> d.lang
 
