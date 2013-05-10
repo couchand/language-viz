@@ -1,0 +1,10 @@
+.star path, .border {
+  stroke: #444444; }
+
+.border {
+  fill: none; }
+
+#viz div {
+  display: inline-block; }
+#viz svg {
+  display: block; }

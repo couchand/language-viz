@@ -1,10 +1,15 @@
 # build the examples
 
-examples: pages styles scripts
+examples: data pages styles scripts
 
+data: www/data.csv
 pages: www/index.html
 styles: www/style.css
 scripts: www/languages.js
+
+www/data.csv:
+	curl http://benchmarksgame.alioth.debian.org/u32/summarydata.php > t.html
+	grep "name,lang,id" t.html | sed "s/<\/\?p>//g" | sed "s/<br\/>/\n/g" > www/data.csv
 
 www/index.html: src/index.haml
 	haml src/index.haml > www/index.html
