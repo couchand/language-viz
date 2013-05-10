@@ -96,8 +96,7 @@ languagesByXThenY = (a) ->
   end = (i) -> Math.min byX.length - 1, i + row_count
   cols = (byX.slice i, end i for i in [0..byX.length] by row_count)
   cols = matrixValues cols
-  cols = (languagesByY.entries col for col in cols)
-  matrixValues cols
+  matrixValues (languagesByY.entries col for col in cols)
 
 d3.csv "languages.csv", (data) ->
   for d in data
