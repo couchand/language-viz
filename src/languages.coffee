@@ -14,8 +14,6 @@ x = d3.scale.sqrt()
 y = d3.scale.sqrt()
     .rangeRound [h, 0]
 
-color = d3.scale.category20()
-
 d3.csv "languages.csv", (data) ->
   for d in data
     d[x_column] = parseFloat d[x_column]
@@ -37,7 +35,7 @@ d3.csv "languages.csv", (data) ->
     .enter().append("circle")
     .classed("dot", -> yes)
     .attr("r", 2)
-    .attr("fill", (d) -> color d['lang'])
-    .attr("opacity", .4)
+    .attr("fill", "#d88")
+    .attr("opacity", .6)
     .attr "transform", (d) ->
       "translate(#{x d[x_column]},#{y d[y_column]})"
