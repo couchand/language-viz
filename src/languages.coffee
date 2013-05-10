@@ -1,9 +1,10 @@
 # language visualizations
 
-w = 150
-h = 150
+w = 40
+h = 40
 
-margin = 10
+margin_w = 40
+margin_h = 10
 
 title_h = 15
 
@@ -99,10 +100,10 @@ d3.csv "languages.csv", (data) ->
   svg = col.selectAll("svg")
     .data((d) -> d)
     .enter().append("svg")
-    .attr("width", w + margin + margin)
-    .attr("height", h + margin + margin + title_h)
+    .attr("width", w + margin_w + margin_w)
+    .attr("height", h + margin_h + margin_h + title_h)
     .append("g")
-    .attr("transform", "translate(#{margin},#{margin + title_h})")
+    .attr("transform", "translate(#{margin_w},#{margin_h + title_h})")
 
   svg.append("title")
     .text (d) -> d.lang
@@ -122,20 +123,6 @@ d3.csv "languages.csv", (data) ->
 
   focus = svg.append("g")
     .attr("clip-path", "url(#clip)")
-
-  benchmark = focus.selectAll(".benchmark")
-    .data(data)
-    .enter().append("g")
-    .classed("benchmark", -> yes)
-    .attr "transform", (d) ->
-      "translate(#{getX0 d},#{getY0 d})"
-
-  dots = benchmark.append("circle")
-    .attr("r", 2)
-    .attr("fill", "#d88")
-    .attr("opacity", .6)
-
-  lines
 
   star = focus.append("g")
     .classed("star", -> yes)
