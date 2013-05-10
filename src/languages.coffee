@@ -5,6 +5,8 @@ h = 150
 
 margin = 10
 
+row_count = 6
+
 selected_lang = "Scala"
 
 x_column = "cpu(s)"
@@ -38,10 +40,24 @@ best = d3.nest()
     m[y_column] = d3.min v, getY
     m
 
+byLanguage = d3.nest()
+  .key((d) -> d.lang)
+
+languagesByX = d3.nest()
+  .key(getX)
+  .sortKeys((a,b) -> d3.ascending parseFloat(a), parseFloat(b))
+
+languagesByY = d3.nest()
+  .key(getY)
+  .sortKeys((a,b) -> d3.ascending parseFloat(a), parseFloat(b))
+
+languagesByXThenY = (a) ->
+  byX = languagesByX.entries a
+  cols = (byX.slice i, Math.min(byX.length-1,i+row_count) for i in [0..byX.length] by row_count)
+  ((l.values[0] for l in languagesByY.entries(cell.values[0] for cell in col)) for col in cols)
+
 d3.csv "languages.csv", (data) ->
   for d in data
-    if parseFloat(getX(d)) > 100000 or parseFloat(getY(d)) > 10000
-      console.log d
     d[x_column] = parseFloat d[x_column]
     d[y_column] = parseFloat d[y_column]
 
@@ -61,11 +77,33 @@ d3.csv "languages.csv", (data) ->
 
   averages = average.map data
 
-  svg = d3.select("#viz").append("svg")
+  flat_averages = []
+  for lang, avg of averages
+    m = {}
+    m.lang = lang
+    m[x_column] = getX(avg)
+    m[y_column] = getY(avg)
+    flat_averages.push m
+
+  layout = languagesByXThenY flat_averages
+
+  lang_benches = byLanguage.map data
+
+  col = d3.select("#viz").selectAll(".col")
+    .data(layout)
+    .enter().append("div")
+    .classed("col", -> yes)
+
+  svg = col.selectAll("svg")
+    .data((d) -> d)
+    .enter().append("svg")
     .attr("width", w + margin + margin)
     .attr("height", h + margin + margin)
     .append("g")
     .attr("transform", "translate(#{margin},#{margin})")
+
+  svg.append("title")
+    .text (d) -> d.lang
 
   clip = svg.append("defs").append("clipPath")
     .attr("id", "clip")
@@ -88,30 +126,27 @@ d3.csv "languages.csv", (data) ->
     .attr("fill", "#d88")
     .attr("opacity", .6)
 
-  lines = benchmark.append("path")
+  lines
+
+  star = focus.append("g")
+    .classed("star", -> yes)
+    .attr "transform", (d) ->
+      avg = averages[d.lang]
+      "translate(#{getX0 avg},#{getY0 avg})"
+
+  lines = star.selectAll("path")
+    .data((d) -> lang_benches[d.lang])
+    .enter().append("path")
     .attr("opacity", .6)
+    .attr("stroke", "#555")
     .attr "d", (d) ->
       avg = averages[d.lang]
-      cx = getX0(avg) - getX0(d)
-      cy = getY0(avg) - getY0(d)
+      cx = getX0(d) - getX0(avg)
+      cy = getY0(d) - getY0(avg)
       "M 0 0 L #{cx} #{cy}"
-
-  update = ->
-    lines.attr "stroke", (d) ->
-      if d.lang is selected_lang then "#555" else "none"
-
-  update()
 
   focus.append("rect")
     .attr("width", w)
     .attr("height", h)
     .attr("stroke", "#444")
     .attr("fill", "none")
-
-  langs = d3.select("body").append("ul").selectAll("li")
-    .data((a for a of averages))
-    .enter().append("li")
-    .text((d) -> d)
-    .on "mouseover", (d) ->
-      selected_lang = d
-      update()
