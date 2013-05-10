@@ -5,6 +5,8 @@ h = 150
 
 margin = 10
 
+title_h = 15
+
 row_count = 6
 
 selected_lang = "Scala"
@@ -98,11 +100,18 @@ d3.csv "languages.csv", (data) ->
     .data((d) -> d)
     .enter().append("svg")
     .attr("width", w + margin + margin)
-    .attr("height", h + margin + margin)
+    .attr("height", h + margin + margin + title_h)
     .append("g")
-    .attr("transform", "translate(#{margin},#{margin})")
+    .attr("transform", "translate(#{margin},#{margin + title_h})")
 
   svg.append("title")
+    .text (d) -> d.lang
+
+  svg.append("text")
+    .attr("x", w/2)
+    .attr("y", -4)
+    .style("font-size", title_h - 2)
+    .attr("text-anchor", "middle")
     .text (d) -> d.lang
 
   clip = svg.append("defs").append("clipPath")
