@@ -107,6 +107,13 @@ flatten = (lang, avg) ->
   setY m, getY avg
   m
 
+rect = (c, s, f) ->
+  c.append("rect")
+    .attr("width", w)
+    .attr("height", h)
+    .attr("stroke", s)
+    .attr("fill", f)
+
 d3.csv "languages.csv", (data) ->
   for d in data
     setX d, parseFloat getX d
@@ -165,11 +172,7 @@ d3.csv "languages.csv", (data) ->
   focus = svg.append("g")
     .attr("clip-path", "url(#clip)")
 
-  focus.append("rect")
-    .attr("width", w)
-    .attr("height", h)
-    .attr("stroke", "none")
-    .attr("fill", type)
+  rect focus, "none", type
 
   star = focus.append("g")
     .classed("star", -> yes)
@@ -187,8 +190,4 @@ d3.csv "languages.csv", (data) ->
       cy = getY0(d) - getY0(avg)
       "M 0 0 L #{cx} #{cy}"
 
-  focus.append("rect")
-    .attr("width", w)
-    .attr("height", h)
-    .attr("stroke", "#444")
-    .attr("fill", "none")
+  rect focus, "#444", "none"
