@@ -90,8 +90,11 @@ languagesByY = d3.nest()
 
 languagesByXThenY = (a) ->
   byX = languagesByX.entries a
-  cols = (byX.slice i, Math.min(byX.length-1,i+row_count) for i in [0..byX.length] by row_count)
-  ((l.values[0] for l in languagesByY.entries(cell.values[0] for cell in col)) for col in cols)
+  end = (i) -> Math.min byX.length - 1, i + row_count
+  cols = (byX.slice i, end i for i in [0..byX.length] by row_count)
+  cols = ((cell.values[0] for cell in col) for col in cols)
+  cols = (languagesByY.entries col for col in cols)
+  ((cell.values[0] for cell in col) for col in cols)
 
 d3.csv "languages.csv", (data) ->
   for d in data
