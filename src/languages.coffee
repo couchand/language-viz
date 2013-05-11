@@ -140,6 +140,12 @@ d3.csv "data.csv", (data) ->
 
   lang_benches = byLanguage.map data
 
+  spoke = (d) ->
+      avg = averages[d.lang]
+      cx = getX0(d) - getX0(avg)
+      cy = getY0(d) - getY0(avg)
+      "M 0 0 L #{cx} #{cy}"
+
   col = d3.select("#viz").selectAll(".col")
     .data(layout)
     .enter().append("div")
@@ -183,10 +189,6 @@ d3.csv "data.csv", (data) ->
     .data((d) -> lang_benches[d.lang])
     .enter().append("path")
     .attr("stroke", "#555")
-    .attr "d", (d) ->
-      avg = averages[d.lang]
-      cx = getX0(d) - getX0(avg)
-      cy = getY0(d) - getY0(avg)
-      "M 0 0 L #{cx} #{cy}"
+    .attr("d", spoke)
 
   rect focus, "#444", "none"
