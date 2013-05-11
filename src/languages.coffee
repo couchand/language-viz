@@ -30,14 +30,15 @@ class CategoryStars
   getX0: (d) -> @scaleX @getX d
   getY0: (d) -> @scaleY @getY d
 
+  background: d3.scale.ordinal()
+      .domain(['imperative', 'oo', 'functional', 'scripting'])
+      .range(['#6da', '#97e', '#fe7', '#fa7'])
+
+  type: ->
+    t = @
+    (d) -> t.background types[d.lang]
+
 myStars = new CategoryStars
-
-background = d3.scale.ordinal()
-    .domain(['imperative', 'oo', 'functional', 'scripting'])
-    .range(['#6da', '#97e', '#fe7', '#fa7'])
-
-type = (d) ->
-  background types[d.lang]
 
 rollup = (k, f) ->
   d3.nest()
@@ -135,7 +136,7 @@ d3.csv "data.csv", (data) ->
       padding: 5
       data: myStars.lang
 
-  rect(focus).attr "fill", type
+  rect(focus).attr "fill", myStars.type()
 
   star = focus.append("g")
     .classed("star", -> yes)
