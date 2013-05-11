@@ -105,49 +105,6 @@ rect = (c) ->
     .attr("width", width)
     .attr("height", height)
 
-smallMultiples = (container, options) ->
-  w = options.width or 0
-  w += options.margin.left or 0
-  w += options.margin.right or 0
-  h = options.height or 0
-  h += options.margin.top or 0
-  h += options.margin.bottom or 0
-  h += options.title.size or 0
-  h += options.title.padding or 0
-  ml = options.margin.left or 0
-  mt = options.margin.top or 0
-  mt += options.title.height or 0
-  mt += options.title.padding or 0
-  fw = options.width or 0
-  ts = options.title.size or 0
-  td = options.title.data or -> ''
-
-  svg = container.selectAll("svg")
-    .data((d) -> d)
-    .enter().append("svg")
-    .attr("width", w)
-    .attr("height", h)
-    .append("g")
-    .attr("transform", "translate(#{ml},#{mt})")
-
-  svg.append("title")
-    .text td
-
-  svg.append("text")
-    .attr("x", fw/2)
-    .attr("y", -4)
-    .style("font-size", ts)
-    .attr("text-anchor", "middle")
-    .text td
-
-  clip = svg.append("defs").append("clipPath")
-    .attr("id", "clip")
-
-  rect clip
-
-  focus = svg.append("g")
-    .attr("clip-path", "url(#clip)")
-
 d3.csv "data.csv", (data) ->
   for d in data
     setX d, parseFloat getX d

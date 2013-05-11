@@ -5,7 +5,7 @@ examples: data pages styles scripts
 data: www/data.csv
 pages: www/index.html
 styles: www/style.css
-scripts: www/languages.js
+scripts: www/languages.js www/smallMultiples.js
 
 www/data.csv:
 	curl http://benchmarksgame.alioth.debian.org/u32/summarydata.php > t.html
@@ -19,3 +19,6 @@ www/style.css: src/style.sass
 
 www/languages.js: src/languages.coffee
 	coffee -c -o www src/languages.coffee
+
+www/smallMultiples.js: src/smallMultiples.coffee
+	coffee -cb -o www src/smallMultiples.coffee
