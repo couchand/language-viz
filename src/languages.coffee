@@ -30,13 +30,13 @@ class CategoryStars
   getX0: (d) -> @scaleX @getX d
   getY0: (d) -> @scaleY @getY d
 
-  background: d3.scale.ordinal()
+  typeColor: d3.scale.ordinal()
       .domain(['imperative', 'oo', 'functional', 'scripting'])
       .range(['#6da', '#97e', '#fe7', '#fa7'])
 
-  type: ->
+  background: ->
     t = @
-    (d) -> t.background types[d.lang]
+    (d) -> t.typeColor types[d.lang]
 
 myStars = new CategoryStars
 
@@ -136,7 +136,7 @@ d3.csv "data.csv", (data) ->
       padding: 5
       data: myStars.lang
 
-  rect(focus).attr "fill", myStars.type()
+  rect(focus).attr "fill", myStars.background()
 
   star = focus.append("g")
     .classed("star", -> yes)
