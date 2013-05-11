@@ -17,6 +17,12 @@ class CategoryStars
 
   getX: (d) -> d[@x_column]
   getY: (d) -> d[@y_column]
+  x: ->
+    t = @
+    (d) -> t.getX d
+  y: ->
+    t = @
+    (d) -> t.getY d
 
 myStars = new CategoryStars
 
@@ -38,8 +44,8 @@ rollup = (k, f) ->
     .key((d) -> d[k])
     .rollup (v) ->
       m = {}
-      setX m, d3[f] v, (d) -> myStars.getX d
-      setY m, d3[f] v, (d) -> myStars.getY d
+      setX m, d3[f] v, myStars.x()
+      setY m, d3[f] v, myStars.y()
       m
 
 average = rollup 'lang', 'mean'
@@ -49,11 +55,11 @@ byLanguage = d3.nest()
   .key(myStars.lang)
 
 languagesByX = d3.nest()
-  .key((d) -> myStars.getX d)
+  .key(myStars.x())
   .sortKeys((a,b) -> d3.ascending parseFloat(a), parseFloat(b))
 
 languagesByY = d3.nest()
-  .key((d) -> myStars.getY d)
+  .key(myStars.y())
   .sortKeys((a,b) -> d3.descending parseFloat(a), parseFloat(b))
 
 matrixValues = (cols) ->
