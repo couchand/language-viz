@@ -13,10 +13,9 @@ class CategoryStars
 
   scaleX: d3.scale.sqrt()
   scaleY: d3.scale.sqrt()
+  lang: (d) -> d.lang
 
 myStars = new CategoryStars()
-
-lang = (d) -> d.lang
 
 getX = (d) -> d[myStars.x_column]
 getY = (d) -> d[myStars.y_column]
@@ -47,7 +46,7 @@ average = rollup 'lang', 'mean'
 best = rollup 'name', 'min'
 
 byLanguage = d3.nest()
-  .key(lang)
+  .key(myStars.lang)
 
 languagesByX = d3.nest()
   .key(getX)
@@ -128,7 +127,7 @@ d3.csv "data.csv", (data) ->
     title:
       size: 10
       padding: 5
-      data: lang
+      data: myStars.lang
 
   rect(focus).attr "fill", type
 
