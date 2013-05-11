@@ -15,16 +15,16 @@ class CategoryStars
   scaleY: d3.scale.sqrt()
   lang: (d) -> d.lang
 
-myStars = new CategoryStars()
+  getX: (d) -> d[@x_column]
+  getY: (d) -> d[@y_column]
 
-getX = (d) -> d[myStars.x_column]
-getY = (d) -> d[myStars.y_column]
+myStars = new CategoryStars
 
 setX = (d, x) -> d[myStars.x_column] = x
 setY = (d, y) -> d[myStars.y_column] = y
 
-getX0 = (d) -> myStars.scaleX getX d
-getY0 = (d) -> myStars.scaleY getY d
+getX0 = (d) -> myStars.scaleX myStars.getX d
+getY0 = (d) -> myStars.scaleY myStars.getY d
 
 background = d3.scale.ordinal()
     .domain(['imperative', 'oo', 'functional', 'scripting'])
@@ -38,8 +38,8 @@ rollup = (k, f) ->
     .key((d) -> d[k])
     .rollup (v) ->
       m = {}
-      setX m, d3[f] v, getX
-      setY m, d3[f] v, getY
+      setX m, d3[f] v, (d) -> myStars.getX d
+      setY m, d3[f] v, (d) -> myStars.getY d
       m
 
 average = rollup 'lang', 'mean'
@@ -49,11 +49,11 @@ byLanguage = d3.nest()
   .key(myStars.lang)
 
 languagesByX = d3.nest()
-  .key(getX)
+  .key((d) -> myStars.getX d)
   .sortKeys((a,b) -> d3.ascending parseFloat(a), parseFloat(b))
 
 languagesByY = d3.nest()
-  .key(getY)
+  .key((d) -> myStars.getY d)
   .sortKeys((a,b) -> d3.descending parseFloat(a), parseFloat(b))
 
 matrixValues = (cols) ->
@@ -70,8 +70,8 @@ languagesByXThenY = (a) ->
 flatten = (lng, avg) ->
   m = {}
   m.lang = lng
-  setX m, getX avg
-  setY m, getY avg
+  setX m, myStars.getX avg
+  setY m, myStars.getY avg
   m
 
 rect = (c) ->
@@ -81,14 +81,14 @@ rect = (c) ->
 
 d3.csv "data.csv", (data) ->
   for d in data
-    setX d, parseFloat getX d
-    setY d, parseFloat getY d
+    setX d, parseFloat myStars.getX d
+    setY d, parseFloat myStars.getY d
 
   mins = best.map data
 
   for d in data
-    setX d, getX(d) / getX(mins[d.name])
-    setY d, getY(d) / getY(mins[d.name])
+    setX d, myStars.getX(d) / myStars.getX(mins[d.name])
+    setY d, myStars.getY(d) / myStars.getY(mins[d.name])
 
   myStars.scaleX.domain [0, 5000]
   myStars.scaleY.domain [1, 6]
