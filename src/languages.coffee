@@ -66,6 +66,20 @@ class CategoryStars
       t.setY m, d3[f] v, myStars.y()
       m
 
+  clean: (data) ->
+    for d in data
+      @setX d, parseFloat @getX d
+      @setY d, parseFloat @getY d
+
+    mins = @best.map data
+
+    for d in data
+      @setX d, @getX(d) / @getX(mins[d.name])
+      @setY d, @getY(d) / @getY(mins[d.name])
+
+    @scaleX.domain [0, 5000]
+    @scaleY.domain [1, 6]
+
 myStars = new CategoryStars
 
 byLanguage = d3.nest()
@@ -91,18 +105,7 @@ languagesByXThenY = (a) ->
   matrixValues (languagesByY.entries col for col in cols)
 
 d3.csv "data.csv", (data) ->
-  for d in data
-    myStars.setX d, parseFloat myStars.getX d
-    myStars.setY d, parseFloat myStars.getY d
-
-  mins = myStars.best.map data
-
-  for d in data
-    myStars.setX d, myStars.getX(d) / myStars.getX(mins[d.name])
-    myStars.setY d, myStars.getY(d) / myStars.getY(mins[d.name])
-
-  myStars.scaleX.domain [0, 5000]
-  myStars.scaleY.domain [1, 6]
+  myStars.clean data
 
   #x.domain d3.extent data, getX
   #y.domain d3.extent data, getY
