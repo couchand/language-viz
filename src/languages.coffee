@@ -27,10 +27,10 @@ class CategoryStars
   setX: (d, x) -> d[@x_column] = x
   setY: (d, y) -> d[@y_column] = y
 
-myStars = new CategoryStars
+  getX0: (d) -> @scaleX @getX d
+  getY0: (d) -> @scaleY @getY d
 
-getX0 = (d) -> myStars.scaleX myStars.getX d
-getY0 = (d) -> myStars.scaleY myStars.getY d
+myStars = new CategoryStars
 
 background = d3.scale.ordinal()
     .domain(['imperative', 'oo', 'functional', 'scripting'])
@@ -113,8 +113,8 @@ d3.csv "data.csv", (data) ->
 
   spoke = (d) ->
     avg = averages[d.lang]
-    cx = getX0(d) - getX0(avg)
-    cy = getY0(d) - getY0(avg)
+    cx = myStars.getX0(d) - myStars.getX0(avg)
+    cy = myStars.getY0(d) - myStars.getY0(avg)
     "M 0 0 L #{cx} #{cy}"
 
   col = d3.select("#viz").selectAll(".col")
@@ -141,7 +141,7 @@ d3.csv "data.csv", (data) ->
     .classed("star", -> yes)
     .attr "transform", (d) ->
       avg = averages[d.lang]
-      "translate(#{getX0 avg},#{getY0 avg})"
+      "translate(#{myStars.getX0 avg},#{myStars.getY0 avg})"
 
   lines = star.selectAll("path")
     .data((d) -> lang_benches[d.lang])
