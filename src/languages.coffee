@@ -1,28 +1,31 @@
 # language visualizations
 
-width = 40
-height = 40
-row_count = 5
+class CategoryStars
+  constructor: (@width, @height) ->
+    @width ?= 40
+    @height ?= 40
+    @row_count = 5
 
-x_column = "cpu(s)"
-y_column = "size(B)"
+    @x_column = "cpu(s)"
+    @y_column = "size(B)"
+    @x.rangeRound [0, @width]
+    @y.rangeRound [@height, 0]
+
+  x: d3.scale.sqrt()
+  y: d3.scale.sqrt()
+
+myStars = new CategoryStars()
 
 lang = (d) -> d.lang
 
-getX = (d) -> d[x_column]
-getY = (d) -> d[y_column]
+getX = (d) -> d[myStars.x_column]
+getY = (d) -> d[myStars.y_column]
 
-setX = (d, x) -> d[x_column] = x
-setY = (d, y) -> d[y_column] = y
+setX = (d, x) -> d[myStars.x_column] = x
+setY = (d, y) -> d[myStars.y_column] = y
 
-x = d3.scale.sqrt()
-    .rangeRound [0, width]
-
-y = d3.scale.sqrt()
-    .rangeRound [height, 0]
-
-getX0 = (d) -> x getX d
-getY0 = (d) -> y getY d
+getX0 = (d) -> myStars.x getX d
+getY0 = (d) -> myStars.y getY d
 
 background = d3.scale.ordinal()
     .domain(['imperative', 'oo', 'functional', 'scripting'])
@@ -58,9 +61,10 @@ matrixValues = (cols) ->
   ((cell.values[0] for cell in col) for col in cols)
 
 languagesByXThenY = (a) ->
+  chunk = myStars.row_count
   byX = languagesByX.entries a
-  end = (i) -> Math.min byX.length - 1, i + row_count
-  cols = (byX.slice i, end i for i in [0..byX.length] by row_count)
+  end = (i) -> Math.min byX.length - 1, i + chunk
+  cols = (byX.slice i, end i for i in [0..byX.length] by chunk)
   cols = matrixValues cols
   matrixValues (languagesByY.entries col for col in cols)
 
@@ -73,8 +77,8 @@ flatten = (lng, avg) ->
 
 rect = (c) ->
   c.append("rect")
-    .attr("width", width)
-    .attr("height", height)
+    .attr("width", myStars.width)
+    .attr("height", myStars.height)
 
 d3.csv "data.csv", (data) ->
   for d in data
@@ -87,8 +91,8 @@ d3.csv "data.csv", (data) ->
     setX d, getX(d) / getX(mins[d.name])
     setY d, getY(d) / getY(mins[d.name])
 
-  x.domain [0, 5000]
-  y.domain [1, 6]
+  myStars.x.domain [0, 5000]
+  myStars.y.domain [1, 6]
 
   #x.domain d3.extent data, getX
   #y.domain d3.extent data, getY
@@ -114,8 +118,8 @@ d3.csv "data.csv", (data) ->
     .classed("col", -> yes)
 
   focus = smallMultiples col,
-    width: width
-    height: height
+    width: myStars.width
+    height: myStars.height
     margin:
       left: 40
       right: 40
