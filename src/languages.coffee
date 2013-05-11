@@ -107,12 +107,10 @@ flatten = (lng, avg) ->
   setY m, getY avg
   m
 
-rect = (c, s, f) ->
+rect = (c) ->
   c.append("rect")
     .attr("width", w)
     .attr("height", h)
-    .attr("stroke", s)
-    .attr("fill", f)
 
 d3.csv "data.csv", (data) ->
   for d in data
@@ -172,12 +170,12 @@ d3.csv "data.csv", (data) ->
   clip = svg.append("defs").append("clipPath")
     .attr("id", "clip")
 
-  rect clip, "none", "none"
+  rect clip
 
   focus = svg.append("g")
     .attr("clip-path", "url(#clip)")
 
-  rect focus, "none", type
+  rect(focus).attr "fill", type
 
   star = focus.append("g")
     .classed("star", -> yes)
@@ -190,4 +188,4 @@ d3.csv "data.csv", (data) ->
     .enter().append("path")
     .attr("d", spoke)
 
-  rect focus, "#444", "none"
+  rect(focus).classed 'border', -> yes
