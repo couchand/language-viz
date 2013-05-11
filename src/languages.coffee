@@ -188,7 +188,6 @@ d3.csv "data.csv", (data) ->
   lines = star.selectAll("path")
     .data((d) -> lang_benches[d.lang])
     .enter().append("path")
-    .attr("stroke", "#555")
     .attr("d", spoke)
 
   rect focus, "#444", "none"
