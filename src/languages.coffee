@@ -24,10 +24,10 @@ class CategoryStars
     t = @
     (d) -> t.getY d
 
-myStars = new CategoryStars
+  setX: (d, x) -> d[@x_column] = x
+  setY: (d, y) -> d[@y_column] = y
 
-setX = (d, x) -> d[myStars.x_column] = x
-setY = (d, y) -> d[myStars.y_column] = y
+myStars = new CategoryStars
 
 getX0 = (d) -> myStars.scaleX myStars.getX d
 getY0 = (d) -> myStars.scaleY myStars.getY d
@@ -44,8 +44,8 @@ rollup = (k, f) ->
     .key((d) -> d[k])
     .rollup (v) ->
       m = {}
-      setX m, d3[f] v, myStars.x()
-      setY m, d3[f] v, myStars.y()
+      myStars.setX m, d3[f] v, myStars.x()
+      myStars.setY m, d3[f] v, myStars.y()
       m
 
 average = rollup 'lang', 'mean'
@@ -76,8 +76,8 @@ languagesByXThenY = (a) ->
 flatten = (lng, avg) ->
   m = {}
   m.lang = lng
-  setX m, myStars.getX avg
-  setY m, myStars.getY avg
+  myStars.setX m, myStars.getX avg
+  myStars.setY m, myStars.getY avg
   m
 
 rect = (c) ->
@@ -87,14 +87,14 @@ rect = (c) ->
 
 d3.csv "data.csv", (data) ->
   for d in data
-    setX d, parseFloat myStars.getX d
-    setY d, parseFloat myStars.getY d
+    myStars.setX d, parseFloat myStars.getX d
+    myStars.setY d, parseFloat myStars.getY d
 
   mins = best.map data
 
   for d in data
-    setX d, myStars.getX(d) / myStars.getX(mins[d.name])
-    setY d, myStars.getY(d) / myStars.getY(mins[d.name])
+    myStars.setX d, myStars.getX(d) / myStars.getX(mins[d.name])
+    myStars.setY d, myStars.getY(d) / myStars.getY(mins[d.name])
 
   myStars.scaleX.domain [0, 5000]
   myStars.scaleY.domain [1, 6]
