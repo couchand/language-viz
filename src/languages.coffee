@@ -112,6 +112,33 @@ rect = (c) ->
     .attr("width", w)
     .attr("height", h)
 
+smallMultiples = (container) ->
+  svg = container.selectAll("svg")
+    .data((d) -> d)
+    .enter().append("svg")
+    .attr("width", w + margin_w + margin_w)
+    .attr("height", h + margin_h + margin_h + title_h)
+    .append("g")
+    .attr("transform", "translate(#{margin_w},#{margin_h + title_h})")
+
+  svg.append("title")
+    .text lang
+
+  svg.append("text")
+    .attr("x", w/2)
+    .attr("y", -4)
+    .style("font-size", title_f)
+    .attr("text-anchor", "middle")
+    .text lang
+
+  clip = svg.append("defs").append("clipPath")
+    .attr("id", "clip")
+
+  rect clip
+
+  focus = svg.append("g")
+    .attr("clip-path", "url(#clip)")
+
 d3.csv "data.csv", (data) ->
   for d in data
     setX d, parseFloat getX d
@@ -149,31 +176,7 @@ d3.csv "data.csv", (data) ->
     .enter().append("div")
     .classed("col", -> yes)
 
-  svg = col.selectAll("svg")
-    .data((d) -> d)
-    .enter().append("svg")
-    .attr("width", w + margin_w + margin_w)
-    .attr("height", h + margin_h + margin_h + title_h)
-    .append("g")
-    .attr("transform", "translate(#{margin_w},#{margin_h + title_h})")
-
-  svg.append("title")
-    .text lang
-
-  svg.append("text")
-    .attr("x", w/2)
-    .attr("y", -4)
-    .style("font-size", title_f)
-    .attr("text-anchor", "middle")
-    .text lang
-
-  clip = svg.append("defs").append("clipPath")
-    .attr("id", "clip")
-
-  rect clip
-
-  focus = svg.append("g")
-    .attr("clip-path", "url(#clip)")
+  focus = smallMultiples col
 
   rect(focus).attr "fill", type
 
