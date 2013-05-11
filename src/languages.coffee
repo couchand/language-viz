@@ -11,6 +11,9 @@ class CategoryStars
     @scaleX.rangeRound [0, @width]
     @scaleY.rangeRound [@height, 0]
 
+    @average = @rollup 'lang', 'mean'
+    @best = @rollup 'name', 'min'
+
   scaleX: d3.scale.sqrt()
   scaleY: d3.scale.sqrt()
   lang: (d) -> d.lang
@@ -50,19 +53,20 @@ class CategoryStars
     @setY m, @getY avg
     m
 
-myStars = new CategoryStars
+  rollup: (k, f) ->
+    d3.nest()
+      .key((d) -> d[k])
+      .rollup @rollupFunction f
 
-rollup = (k, f) ->
-  d3.nest()
-    .key((d) -> d[k])
-    .rollup (v) ->
+  rollupFunction: (f) ->
+    t = @
+    (v) ->
       m = {}
-      myStars.setX m, d3[f] v, myStars.x()
-      myStars.setY m, d3[f] v, myStars.y()
+      t.setX m, d3[f] v, myStars.x()
+      t.setY m, d3[f] v, myStars.y()
       m
 
-average = rollup 'lang', 'mean'
-best = rollup 'name', 'min'
+myStars = new CategoryStars
 
 byLanguage = d3.nest()
   .key(myStars.lang)
@@ -91,7 +95,7 @@ d3.csv "data.csv", (data) ->
     myStars.setX d, parseFloat myStars.getX d
     myStars.setY d, parseFloat myStars.getY d
 
-  mins = best.map data
+  mins = myStars.best.map data
 
   for d in data
     myStars.setX d, myStars.getX(d) / myStars.getX(mins[d.name])
@@ -105,7 +109,7 @@ d3.csv "data.csv", (data) ->
   #x.nice()
   #y.nice()
 
-  averages = average.map data
+  averages = myStars.average.map data
 
   flat_averages = (myStars.flatten lng, avg for lng, avg of averages)
   layout = languagesByXThenY flat_averages
