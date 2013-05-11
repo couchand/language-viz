@@ -38,6 +38,11 @@ class CategoryStars
     t = @
     (d) -> t.typeColor types[d.lang]
 
+  rect: (c) ->
+    c.append("rect")
+      .attr("width", @width)
+      .attr("height", @height)
+
 myStars = new CategoryStars
 
 rollup = (k, f) ->
@@ -80,11 +85,6 @@ flatten = (lng, avg) ->
   myStars.setX m, myStars.getX avg
   myStars.setY m, myStars.getY avg
   m
-
-rect = (c) ->
-  c.append("rect")
-    .attr("width", myStars.width)
-    .attr("height", myStars.height)
 
 d3.csv "data.csv", (data) ->
   for d in data
@@ -136,7 +136,7 @@ d3.csv "data.csv", (data) ->
       padding: 5
       data: myStars.lang
 
-  rect(focus).attr "fill", myStars.background()
+  myStars.rect(focus).attr "fill", myStars.background()
 
   star = focus.append("g")
     .classed("star", -> yes)
@@ -149,4 +149,4 @@ d3.csv "data.csv", (data) ->
     .enter().append("path")
     .attr("d", spoke)
 
-  rect(focus).classed 'border', -> yes
+  myStars.rect(focus).classed 'border', -> yes
