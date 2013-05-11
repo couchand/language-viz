@@ -185,7 +185,7 @@ d3.csv "data.csv", (data) ->
     .enter().append("div")
     .classed("col", -> yes)
 
-  focus = smallMultiples col, {
+  focus = smallMultiples col,
     width: width
     height: height
     margin:
@@ -197,7 +197,6 @@ d3.csv "data.csv", (data) ->
       size: 10
       padding: 5
       data: lang
-  }
 
   rect(focus).attr "fill", type
 
