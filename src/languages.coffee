@@ -43,6 +43,13 @@ class CategoryStars
       .attr("width", @width)
       .attr("height", @height)
 
+  flatten: (lng, avg) ->
+    m = {}
+    m.lang = lng
+    @setX m, @getX avg
+    @setY m, @getY avg
+    m
+
 myStars = new CategoryStars
 
 rollup = (k, f) ->
@@ -79,13 +86,6 @@ languagesByXThenY = (a) ->
   cols = matrixValues cols
   matrixValues (languagesByY.entries col for col in cols)
 
-flatten = (lng, avg) ->
-  m = {}
-  m.lang = lng
-  myStars.setX m, myStars.getX avg
-  myStars.setY m, myStars.getY avg
-  m
-
 d3.csv "data.csv", (data) ->
   for d in data
     myStars.setX d, parseFloat myStars.getX d
@@ -107,7 +107,7 @@ d3.csv "data.csv", (data) ->
 
   averages = average.map data
 
-  flat_averages = (flatten lng, avg for lng, avg of averages)
+  flat_averages = (myStars.flatten lng, avg for lng, avg of averages)
   layout = languagesByXThenY flat_averages
 
   lang_benches = byLanguage.map data
