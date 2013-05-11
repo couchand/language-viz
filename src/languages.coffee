@@ -8,11 +8,11 @@ class CategoryStars
 
     @x_column = "cpu(s)"
     @y_column = "size(B)"
-    @x.rangeRound [0, @width]
-    @y.rangeRound [@height, 0]
+    @scaleX.rangeRound [0, @width]
+    @scaleY.rangeRound [@height, 0]
 
-  x: d3.scale.sqrt()
-  y: d3.scale.sqrt()
+  scaleX: d3.scale.sqrt()
+  scaleY: d3.scale.sqrt()
 
 myStars = new CategoryStars()
 
@@ -24,8 +24,8 @@ getY = (d) -> d[myStars.y_column]
 setX = (d, x) -> d[myStars.x_column] = x
 setY = (d, y) -> d[myStars.y_column] = y
 
-getX0 = (d) -> myStars.x getX d
-getY0 = (d) -> myStars.y getY d
+getX0 = (d) -> myStars.scaleX getX d
+getY0 = (d) -> myStars.scaleY getY d
 
 background = d3.scale.ordinal()
     .domain(['imperative', 'oo', 'functional', 'scripting'])
@@ -91,8 +91,8 @@ d3.csv "data.csv", (data) ->
     setX d, getX(d) / getX(mins[d.name])
     setY d, getY(d) / getY(mins[d.name])
 
-  myStars.x.domain [0, 5000]
-  myStars.y.domain [1, 6]
+  myStars.scaleX.domain [0, 5000]
+  myStars.scaleY.domain [1, 6]
 
   #x.domain d3.extent data, getX
   #y.domain d3.extent data, getY
