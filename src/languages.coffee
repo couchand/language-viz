@@ -175,10 +175,10 @@ d3.csv "data.csv", (data) ->
   lang_benches = byLanguage.map data
 
   spoke = (d) ->
-      avg = averages[d.lang]
-      cx = getX0(d) - getX0(avg)
-      cy = getY0(d) - getY0(avg)
-      "M 0 0 L #{cx} #{cy}"
+    avg = averages[d.lang]
+    cx = getX0(d) - getX0(avg)
+    cy = getY0(d) - getY0(avg)
+    "M 0 0 L #{cx} #{cy}"
 
   col = d3.select("#viz").selectAll(".col")
     .data(layout)
