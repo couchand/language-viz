@@ -1,14 +1,7 @@
 # language visualizations
 
-w = 40
-h = 40
-
-margin_w = 40
-margin_h = 10
-
-title_h = 15
-title_f = 10
-
+width = 40
+height = 40
 row_count = 5
 
 x_column = "cpu(s)"
@@ -23,10 +16,10 @@ setX = (d, x) -> d[x_column] = x
 setY = (d, y) -> d[y_column] = y
 
 x = d3.scale.sqrt()
-    .rangeRound [0, w]
+    .rangeRound [0, width]
 
 y = d3.scale.sqrt()
-    .rangeRound [h, 0]
+    .rangeRound [height, 0]
 
 getX0 = (d) -> x getX d
 getY0 = (d) -> y getY d
@@ -109,27 +102,43 @@ flatten = (lng, avg) ->
 
 rect = (c) ->
   c.append("rect")
-    .attr("width", w)
-    .attr("height", h)
+    .attr("width", width)
+    .attr("height", height)
 
-smallMultiples = (container) ->
+smallMultiples = (container, options) ->
+  w = options.width or 0
+  w += options.margin.left or 0
+  w += options.margin.right or 0
+  h = options.height or 0
+  h += options.margin.top or 0
+  h += options.margin.bottom or 0
+  h += options.title.size or 0
+  h += options.title.padding or 0
+  ml = options.margin.left or 0
+  mt = options.margin.top or 0
+  mt += options.title.height or 0
+  mt += options.title.padding or 0
+  fw = options.width or 0
+  ts = options.title.size or 0
+  td = options.title.data or -> ''
+
   svg = container.selectAll("svg")
     .data((d) -> d)
     .enter().append("svg")
-    .attr("width", w + margin_w + margin_w)
-    .attr("height", h + margin_h + margin_h + title_h)
+    .attr("width", w)
+    .attr("height", h)
     .append("g")
-    .attr("transform", "translate(#{margin_w},#{margin_h + title_h})")
+    .attr("transform", "translate(#{ml},#{mt})")
 
   svg.append("title")
-    .text lang
+    .text td
 
   svg.append("text")
-    .attr("x", w/2)
+    .attr("x", fw/2)
     .attr("y", -4)
-    .style("font-size", title_f)
+    .style("font-size", ts)
     .attr("text-anchor", "middle")
-    .text lang
+    .text td
 
   clip = svg.append("defs").append("clipPath")
     .attr("id", "clip")
@@ -176,7 +185,19 @@ d3.csv "data.csv", (data) ->
     .enter().append("div")
     .classed("col", -> yes)
 
-  focus = smallMultiples col
+  focus = smallMultiples col, {
+    width: width
+    height: height
+    margin:
+      left: 40
+      right: 40
+      top: 10
+      bottom: 10
+    title:
+      size: 10
+      padding: 5
+      data: lang
+  }
 
   rect(focus).attr "fill", type
 
