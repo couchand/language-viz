@@ -169,16 +169,19 @@ class CategoryStars
   createLayout: ->
     @layoutCells @layoutColumns()
 
+  draw: (data) ->
+    @clean data
+    @relativize data
+    @doAverage data
+    @sortByLanguage data
+
+    focus = @createLayout()
+
+    @drawBackground focus
+    @drawStar focus
+    @drawBorder focus
+
 myStars = new CategoryStars
 
 d3.csv "data.csv", (data) ->
-  myStars.clean data
-  myStars.relativize data
-  myStars.doAverage data
-  myStars.sortByLanguage data
-
-  focus = myStars.createLayout()
-
-  myStars.drawBackground focus
-  myStars.drawStar focus
-  myStars.drawBorder focus
+  myStars.draw data
