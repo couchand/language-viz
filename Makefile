@@ -1,11 +1,12 @@
 # build the examples
 
-examples: data pages styles scripts
+examples: data pages styles scripts resources
 
 data: www/data.csv
 pages: www/index.html
 styles: www/style.css
-scripts: www/languages.js www/smallMultiples.js www/types.js
+scripts: www/languages.js www/smallMultiples.js
+resources: www/types.js www/lambdas.js
 
 www/data.csv:
 	curl http://benchmarksgame.alioth.debian.org/u32/summarydata.php > t.html
@@ -18,11 +19,14 @@ www/index.html: src/index.haml
 www/style.css: src/style.sass
 	sass src/style.sass www/style.css
 
-www/languages.js: src/graph.coffee src/matrix.coffee src/select.coffee src/categories.coffee
-	coffee -c -o www -j languages src/graph.coffee src/matrix.coffee src/select.coffee src/categories.coffee
+www/languages.js: src/graph.coffee src/matrix.coffee src/select.coffee src/categories.coffee src/lambda.coffee
+	coffee -c -o www -j languages src/graph.coffee src/matrix.coffee src/select.coffee src/categories.coffee src/lambda.coffee
 
 www/smallMultiples.js: src/smallMultiples.coffee
 	coffee -cb -o www src/smallMultiples.coffee
 
 www/types.js: src/types.coffee
 	coffee -cb -o www src/types.coffee
+
+www/lambdas.js: src/lambdas.coffee
+	coffee -cb -o www src/lambdas.coffee

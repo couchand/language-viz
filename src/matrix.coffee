@@ -8,8 +8,13 @@ class LanguageGraphMatrix extends LanguageGraph
 
     @row_count = 5
 
-    @languagesByX.key @.x()
-    @languagesByY.key @.y()
+    @languagesByX = d3.nest()
+      .key(@.x())
+      .sortKeys((a,b) -> d3.ascending parseFloat(a), parseFloat(b))
+
+    @languagesByY = d3.nest()
+      .key(@.y())
+      .sortKeys((a,b) -> d3.descending parseFloat(a), parseFloat(b))
 
   flatten: (lng, avg) ->
     m = {}
@@ -20,12 +25,6 @@ class LanguageGraphMatrix extends LanguageGraph
 
   flattenAverages: ->
     @flat_averages = (@flatten lng, avg for lng, avg of @averages)
-
-  languagesByX: d3.nest()
-      .sortKeys((a,b) -> d3.ascending parseFloat(a), parseFloat(b))
-
-  languagesByY: d3.nest()
-      .sortKeys((a,b) -> d3.descending parseFloat(a), parseFloat(b))
 
   matrixValues: (cols) ->
     ((cell.values[0] for cell in col) for col in cols)
