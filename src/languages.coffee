@@ -14,6 +14,9 @@ class CategoryStars
     @average = @rollup 'lang', 'mean'
     @best = @rollup 'name', 'min'
 
+    @languagesByX.key @.x()
+    @languagesByY.key @.y()
+
   scaleX: d3.scale.sqrt()
   scaleY: d3.scale.sqrt()
   lang: (d) -> d.lang
@@ -121,35 +124,31 @@ class CategoryStars
     d3.nest()
       .key(myStars.lang)
 
-  languagesByX: ->
-    d3.nest()
-      .key(myStars.x())
+  languagesByX: d3.nest()
       .sortKeys((a,b) -> d3.ascending parseFloat(a), parseFloat(b))
 
-  languagesByY: ->
-    d3.nest()
-      .key(myStars.y())
+  languagesByY: d3.nest()
       .sortKeys((a,b) -> d3.descending parseFloat(a), parseFloat(b))
 
+  matrixValues: (cols) ->
+    ((cell.values[0] for cell in col) for col in cols)
+
+  languagesByXThenY: ->
+    chunk = @row_count
+    byX = @languagesByX.entries @flat_averages
+    end = (i) -> Math.min byX.length - 1, i + chunk
+    cols = (byX.slice i, end i for i in [0..byX.length] by chunk)
+    cols = @matrixValues cols
+    @matrixValues (@languagesByY.entries col for col in cols)
+
 myStars = new CategoryStars
-
-matrixValues = (cols) ->
-  ((cell.values[0] for cell in col) for col in cols)
-
-languagesByXThenY = (a) ->
-  chunk = myStars.row_count
-  byX = myStars.languagesByX().entries a
-  end = (i) -> Math.min byX.length - 1, i + chunk
-  cols = (byX.slice i, end i for i in [0..byX.length] by chunk)
-  cols = matrixValues cols
-  matrixValues (myStars.languagesByY().entries col for col in cols)
 
 d3.csv "data.csv", (data) ->
   myStars.clean data
   myStars.relativize data
   myStars.doAverage data
 
-  layout = languagesByXThenY myStars.flat_averages
+  layout = myStars.languagesByXThenY()
 
   lang_benches = myStars.byLanguage().map data
 
