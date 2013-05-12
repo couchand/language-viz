@@ -53,18 +53,6 @@ class LanguageGraph
       t.setY m, d3[f] v, myStars.y()
       m
 
-  clean: ->
-    for d in @data
-      @setX d, parseFloat @getX d
-      @setY d, parseFloat @getY d
-
-  relativize:->
-    mins = @best.map @data
-
-    for d in @data
-      @setX d, @getX(d) / @getX(mins[d.name])
-      @setY d, @getY(d) / @getY(mins[d.name])
-
   spoke: ->
     t = @
     (d) ->
@@ -101,9 +89,6 @@ class LanguageGraph
 
     @drawLines star
 
-  doAverage: ->
-    @averages = @average.map @data
-
   initialize: (data) ->
     @setData data
     @clean()
@@ -112,3 +97,18 @@ class LanguageGraph
 
   setData: (data) ->
     @data = data
+
+  clean: ->
+    for d in @data
+      @setX d, parseFloat @getX d
+      @setY d, parseFloat @getY d
+
+  relativize:->
+    mins = @best.map @data
+
+    for d in @data
+      @setX d, @getX(d) / @getX(mins[d.name])
+      @setY d, @getY(d) / @getY(mins[d.name])
+
+  doAverage: ->
+    @averages = @average.map @data
