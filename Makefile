@@ -10,6 +10,7 @@ scripts: www/languages.js www/smallMultiples.js www/types.js
 www/data.csv:
 	curl http://benchmarksgame.alioth.debian.org/u32/summarydata.php > t.html
 	grep "name,lang,id" t.html | sed "s/<\/\?p>//g" | sed "s/<br\/>/\n/g" > www/data.csv
+	sed -i "/^$$/d" www/data.csv
 
 www/index.html: src/index.haml
 	haml src/index.haml > www/index.html
