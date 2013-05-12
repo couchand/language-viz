@@ -110,6 +110,13 @@ class CategoryStars
       .enter().append("path")
       .attr("d", @spoke())
 
+  drawStar: (lang_benches, focus) ->
+    star = focus.append("g")
+      .classed("star", -> yes)
+      .attr("transform", @centerStar())
+
+    @drawLines lang_benches, star
+
 myStars = new CategoryStars
 
 byLanguage = d3.nest()
@@ -163,10 +170,6 @@ d3.csv "data.csv", (data) ->
 
   myStars.drawBackground focus
 
-  star = focus.append("g")
-    .classed("star", -> yes)
-    .attr("transform", myStars.centerStar())
-
-  myStars.drawLines lang_benches, star
+  myStars.drawStar lang_benches, focus
 
   myStars.drawBorder focus
