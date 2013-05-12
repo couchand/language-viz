@@ -16,7 +16,9 @@ class LanguageGraph
   lang: (d) -> d.lang
 
   scaleX: d3.scale.sqrt()
+    .domain [0, 5000]
   scaleY: d3.scale.sqrt()
+    .domain [1, 6]
 
   getX: (d) -> d[@x_column]
   getY: (d) -> d[@y_column]
@@ -62,9 +64,6 @@ class LanguageGraph
     for d in data
       @setX d, @getX(d) / @getX(mins[d.name])
       @setY d, @getY(d) / @getY(mins[d.name])
-
-    @scaleX.domain [0, 5000]
-    @scaleY.domain [1, 6]
 
   spoke: ->
     t = @
