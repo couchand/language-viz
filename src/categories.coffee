@@ -1,16 +1,10 @@
 # language visualizations
 
 class CategoryStars extends LanguageGraphMatrix
-  typeColor: d3.scale.ordinal()
-      .domain(['imperative', 'oo', 'functional', 'scripting'])
-      .range(['#6da', '#97e', '#fe7', '#fa7'])
-
-  background: ->
-    t = @
-    (d) -> t.typeColor types[d.lang]
+  type: (d) -> types[d.lang]
 
   drawBackground: (focus) ->
-    @rect(focus).attr("fill", @background())
+    @rect(focus).attr("class", @type)
 
   render: (focus) ->
     @drawBackground focus

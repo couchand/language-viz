@@ -1,16 +1,10 @@
 # language visualizations
 
 class LambdaStars extends LanguageGraphMatrix
-  typeColor: d3.scale.ordinal()
-      .domain(['lambda', 'c', 'other'])
-      .range(['#7f8', '#8cf', '#ccc'])
-
-  background: ->
-    t = @
-    (d) -> t.typeColor lambdas[d.lang]
+  type: (d) -> lambdas[d.lang]
 
   drawBackground: (focus) ->
-    @rect(focus).attr("fill", @background())
+    @rect(focus).attr("class", @type)
 
   render: (focus) ->
     @drawBackground focus
