@@ -10,7 +10,7 @@ and d3".
 [marceau]: http://blog.gmarceau.qc.ca/2009/05/speed-size-and-dependability-of.html "The speed, size and dependability of programming languages"
 [benchmarks]: http://benchmarksgame.alioth.debian.org/ "The Computer Language Benchmarks Game"
 
-    graph = (data, svg) ->
+    graph = (data) ->
 
 So let's navigate over to the Benchmarks Game website and download
 the summary data.  The first thing we notice is that the csv reports
@@ -40,7 +40,7 @@ omitted here, take a look at the git repo for more complete code.
         x = (d) -> scaleX d["cpu(s)"]
         y = (d) -> scaleY d["size(B)"]
     
-        svg.selectAll(".benchmark")
+        focus.selectAll(".benchmark")
             .data(data)
             .enter().append("circle")
             .attr("class", "benchmark")
@@ -73,7 +73,7 @@ First we move add the group and move it into position.
         setLanguage = (lang) ->
             avg = averages[lang]
     
-            star = svg.append("g")
+            star = focus.append("g")
                 .attr("class", "star")
                 .attr("transform", "translate(#{x avg},#{y avg})")
 
@@ -86,6 +86,8 @@ selected language.
                 .attr "d", (d) ->
                     "M 0,0 L #{x(d) - x(avg)},#{y(d) - y(avg)}"
     
+We set the default language on page load.
+
         setLanguage "JavaScript V8"
 
 Finally we need a list of languages to select from.
@@ -95,3 +97,41 @@ Finally we need a list of languages to select from.
             .enter().append("li")
             .text((d) -> d)
             .on "mouseover", setLanguage
+
+boilerplate
+-----------
+
+the rest of this is the boilerplate.  it may not be sexy, but it is
+important.
+
+some constants.
+
+    width = 250
+    height = 250
+    margin = 100
+
+create the svg element and frame.
+
+    svg = d3.select("body").append("svg")
+        .attr("width", width + 2*margin)
+        .attr("height", height + 2*margin)
+        .append("g")
+        .attr("transform", "translate(#{margin},#{margin})")
+
+create a clip path for the frame.
+
+    clip = svg.append("defs").append("clipPath")
+        .attr("id", (d,i) -> "clip#{myCount}-#{i}")
+        .append("rect")
+        .attr("width", fw)
+        .attr("height", fh)
+
+create the focus element within the frame.
+
+    focus = svg.append("g")
+        .attr("clip-path", (d,i) -> "url(#clip#{myCount}-#{i})")
+
+load the data and render the graph.
+
+    d3.csv "data.csv", (data) ->
+        graph data
