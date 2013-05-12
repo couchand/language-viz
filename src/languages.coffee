@@ -147,7 +147,7 @@ class CategoryStars
     @matrixValues (@languagesByY.entries col for col in cols)
 
   layoutColumns: ->
-    col = d3.select("#viz").selectAll(".col")
+    d3.select("#viz").selectAll(".col")
       .data(@languagesByXThenY())
       .enter().append("div")
       .classed("col", -> yes)
@@ -166,6 +166,9 @@ class CategoryStars
         padding: 5
         data: @lang
 
+  createLayout: ->
+    @layoutCells @layoutColumns()
+
 myStars = new CategoryStars
 
 d3.csv "data.csv", (data) ->
@@ -174,8 +177,7 @@ d3.csv "data.csv", (data) ->
   myStars.doAverage data
   myStars.sortByLanguage data
 
-  col = myStars.layoutColumns()
-  focus = myStars.layoutCells col
+  focus = myStars.createLayout()
 
   myStars.drawBackground focus
   myStars.drawStar focus
