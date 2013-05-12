@@ -118,8 +118,6 @@ class LanguageGraph
       .enter().append("circle")
       .classed("benchmark", -> yes)
       .attr("r", 1.5)
-      .attr("fill", "#d88")
-      .attr("opacity", .6)
       .attr("transform", @moveTo())
 
   drawBorder: (focus) ->
