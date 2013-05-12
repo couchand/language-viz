@@ -108,7 +108,7 @@ Then we append a spoke for each benchmark data point of the
 selected language.
 
             star.selectAll("path")
-                .data(  benchmarks[lang] )
+                .data( benchmarks[lang] )
                 .enter().append("path")
                 .attr "d", (d) ->
                     "M 0,0 L #{x(d) - x(avg)},#{y(d) - y(avg)}"
