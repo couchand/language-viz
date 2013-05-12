@@ -1,27 +1,22 @@
 # language visualizations
 
-class CategoryStars
+class LanguageGraph
   constructor: (@width, @height) ->
-    @width ?= 40
-    @height ?= 40
-    @row_count = 5
-
     @container = "#viz"
 
     @x_column = "cpu(s)"
     @y_column = "size(B)"
+
     @scaleX.rangeRound [0, @width]
     @scaleY.rangeRound [@height, 0]
 
     @average = @rollup 'lang', 'mean'
     @best = @rollup 'name', 'min'
 
-    @languagesByX.key @.x()
-    @languagesByY.key @.y()
+  lang: (d) -> d.lang
 
   scaleX: d3.scale.sqrt()
   scaleY: d3.scale.sqrt()
-  lang: (d) -> d.lang
 
   getX: (d) -> d[@x_column]
   getY: (d) -> d[@y_column]
@@ -38,25 +33,10 @@ class CategoryStars
   getX0: (d) -> @scaleX @getX d
   getY0: (d) -> @scaleY @getY d
 
-  typeColor: d3.scale.ordinal()
-      .domain(['imperative', 'oo', 'functional', 'scripting'])
-      .range(['#6da', '#97e', '#fe7', '#fa7'])
-
-  background: ->
-    t = @
-    (d) -> t.typeColor types[d.lang]
-
   rect: (c) ->
     c.append("rect")
       .attr("width", @width)
       .attr("height", @height)
-
-  flatten: (lng, avg) ->
-    m = {}
-    m.lang = lng
-    @setX m, @getX avg
-    @setY m, @getY avg
-    m
 
   rollup: (k, f) ->
     d3.nest()
@@ -86,10 +66,6 @@ class CategoryStars
     @scaleX.domain [0, 5000]
     @scaleY.domain [1, 6]
 
-  doAverage: (data) ->
-    @averages = @average.map data
-    @flat_averages = (@flatten lng, avg for lng, avg of @averages)
-
   spoke: ->
     t = @
     (d) ->
@@ -104,8 +80,6 @@ class CategoryStars
       avg = t.averages[d.lang]
       "translate(#{t.getX0 avg},#{t.getY0 avg})"
 
-  drawBackground: (focus) ->
-    @rect(focus).attr("fill", @background())
   drawBorder: (focus) ->
     @rect(focus).classed('border', -> yes)
 
@@ -130,6 +104,46 @@ class CategoryStars
 
   sortByLanguage: (data) ->
     @lang_benches = d3.nest().key((d) -> d.lang).map data
+
+  doAverage: (data) ->
+    @averages = @average.map data
+
+  initialize: (data) ->
+    @clean data
+    @relativize data
+    @doAverage data
+
+class CategoryStars extends LanguageGraph
+  constructor: (w, h) ->
+    w ?= 40
+    h ?= 40
+    super w, h
+
+    @row_count = 5
+
+    @languagesByX.key @.x()
+    @languagesByY.key @.y()
+
+  typeColor: d3.scale.ordinal()
+      .domain(['imperative', 'oo', 'functional', 'scripting'])
+      .range(['#6da', '#97e', '#fe7', '#fa7'])
+
+  background: ->
+    t = @
+    (d) -> t.typeColor types[d.lang]
+
+  flatten: (lng, avg) ->
+    m = {}
+    m.lang = lng
+    @setX m, @getX avg
+    @setY m, @getY avg
+    m
+
+  flattenAverages: ->
+    @flat_averages = (@flatten lng, avg for lng, avg of @averages)
+
+  drawBackground: (focus) ->
+    @rect(focus).attr("fill", @background())
 
   languagesByX: d3.nest()
       .sortKeys((a,b) -> d3.ascending parseFloat(a), parseFloat(b))
@@ -172,9 +186,8 @@ class CategoryStars
     @layoutCells @layoutColumns()
 
   draw: (data) ->
-    @clean data
-    @relativize data
-    @doAverage data
+    @initialize data
+    @flattenAverages()
     @sortByLanguage data
 
     focus = @createLayout()
