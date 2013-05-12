@@ -20,11 +20,6 @@ class SelectableStar extends LanguageGraph
     @canvas.datum
       lang: lang
 
-  drawStar: (focus) ->
-    @star ?= super(focus)
-    @star.classed 'selected', (d) ->
-      d.lang is @selected_lang
-
   drawDots: (focus) ->
     t = @
     focus.selectAll(".benchmark")
@@ -38,6 +33,17 @@ class SelectableStar extends LanguageGraph
         return if isNaN t.getX d or isNaN t.getY d
         "translate(#{t.getX0 d},#{t.getY0 d})"
 
+  drawList: ->
+    t = @
+    d3.select(@container).append("ul").selectAll("li")
+      .data(a for a of @averages)
+      .enter().append("li")
+      .text((d) -> d)
+      .on "mouseover", (d) ->
+        t.selectLanguage d
+        t.canvas.select('.star').remove()
+        t.drawStar t.canvas
+
   draw: (data) ->
     @initialize data
 
@@ -46,6 +52,7 @@ class SelectableStar extends LanguageGraph
 
     @drawDots focus
     @drawStar focus
+    @drawList()
 
 myStar = new SelectableStar()
 
