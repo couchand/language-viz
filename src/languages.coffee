@@ -99,6 +99,11 @@ class CategoryStars
       avg = t.averages[d.lang]
       "translate(#{t.getX0 avg},#{t.getY0 avg})"
 
+  drawBackground: (focus) ->
+    @rect(focus).attr("fill", @background())
+  drawBorder: (focus) ->
+    @rect(focus).classed('border', -> yes)
+
 myStars = new CategoryStars
 
 byLanguage = d3.nest()
@@ -150,7 +155,7 @@ d3.csv "data.csv", (data) ->
       padding: 5
       data: myStars.lang
 
-  myStars.rect(focus).attr "fill", myStars.background()
+  myStars.drawBackground focus
 
   star = focus.append("g")
     .classed("star", -> yes)
@@ -161,4 +166,4 @@ d3.csv "data.csv", (data) ->
     .enter().append("path")
     .attr("d", myStars.spoke())
 
-  myStars.rect(focus).classed 'border', -> yes
+  myStars.drawBorder focus
