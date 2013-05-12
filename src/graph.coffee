@@ -108,5 +108,20 @@ class LanguageGraph
       cy = t.getY0(d) - t.getY0(avg)
       "M 0 0 L #{cx} #{cy}"
 
+  moveTo: ->
+    t = @
+    (d) ->
+      "translate(#{t.getX0 d},#{t.getY0 d})"
+
+  drawDots: (focus) ->
+    focus.selectAll(".benchmark")
+      .data(@data)
+      .enter().append("circle")
+      .classed("benchmark", -> yes)
+      .attr("r", 1.5)
+      .attr("fill", "#d88")
+      .attr("opacity", .6)
+      .attr("transform", @moveTo())
+
   drawBorder: (focus) ->
     @rect(focus).classed('border', -> yes)

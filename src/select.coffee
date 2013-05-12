@@ -20,21 +20,6 @@ class SelectableStar extends LanguageGraph
     @canvas.datum
       lang: lang
 
-  moveTo: ->
-    t = @
-    (d) ->
-      "translate(#{t.getX0 d},#{t.getY0 d})"
-
-  drawDots: (focus) ->
-    focus.selectAll(".benchmark")
-      .data(@data)
-      .enter().append("circle")
-      .classed("benchmark", -> yes)
-      .attr("r", 1.5)
-      .attr("fill", "#d88")
-      .attr("opacity", .6)
-      .attr("transform", @moveTo())
-
   languages: ->
     ls = (a for a of @averages)
     ls.sort()
