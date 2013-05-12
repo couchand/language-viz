@@ -1,6 +1,8 @@
 # small multiples
 # assumes the container has a datum array of the categories
 
+count = 0
+
 smallMultiples = (container, options) ->
   w = options.width or 0
   w += options.margin?.left or 0
@@ -22,6 +24,8 @@ smallMultiples = (container, options) ->
 
   s = container
 
+  myCount = count++
+
   s = s.selectAll("svg")
     .data(d).enter() if d?
 
@@ -42,10 +46,10 @@ smallMultiples = (container, options) ->
     .text(td) if td
 
   clip = svg.append("defs").append("clipPath")
-    .attr("id", (d,i) -> "clip#{i}")
+    .attr("id", (d,i) -> "clip#{myCount}-#{i}")
     .append("rect")
     .attr("width", fw)
     .attr("height", fh)
 
   focus = svg.append("g")
-    .attr("clip-path", (d,i) -> "url(#clip#{i})")
+    .attr("clip-path", (d,i) -> "url(#clip#{myCount}-#{i})")
