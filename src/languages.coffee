@@ -117,29 +117,32 @@ class CategoryStars
 
     @drawLines lang_benches, star
 
+  byLanguage: ->
+    d3.nest()
+      .key(myStars.lang)
+
+  languagesByX: ->
+    d3.nest()
+      .key(myStars.x())
+      .sortKeys((a,b) -> d3.ascending parseFloat(a), parseFloat(b))
+
+  languagesByY: ->
+    d3.nest()
+      .key(myStars.y())
+      .sortKeys((a,b) -> d3.descending parseFloat(a), parseFloat(b))
+
 myStars = new CategoryStars
-
-byLanguage = d3.nest()
-  .key(myStars.lang)
-
-languagesByX = d3.nest()
-  .key(myStars.x())
-  .sortKeys((a,b) -> d3.ascending parseFloat(a), parseFloat(b))
-
-languagesByY = d3.nest()
-  .key(myStars.y())
-  .sortKeys((a,b) -> d3.descending parseFloat(a), parseFloat(b))
 
 matrixValues = (cols) ->
   ((cell.values[0] for cell in col) for col in cols)
 
 languagesByXThenY = (a) ->
   chunk = myStars.row_count
-  byX = languagesByX.entries a
+  byX = myStars.languagesByX().entries a
   end = (i) -> Math.min byX.length - 1, i + chunk
   cols = (byX.slice i, end i for i in [0..byX.length] by chunk)
   cols = matrixValues cols
-  matrixValues (languagesByY.entries col for col in cols)
+  matrixValues (myStars.languagesByY().entries col for col in cols)
 
 d3.csv "data.csv", (data) ->
   myStars.clean data
@@ -148,7 +151,7 @@ d3.csv "data.csv", (data) ->
 
   layout = languagesByXThenY myStars.flat_averages
 
-  lang_benches = byLanguage.map data
+  lang_benches = myStars.byLanguage().map data
 
   col = d3.select("#viz").selectAll(".col")
     .data(layout)
