@@ -33,10 +33,15 @@ class SelectableStar extends LanguageGraph
         return if isNaN t.getX d or isNaN t.getY d
         "translate(#{t.getX0 d},#{t.getY0 d})"
 
+  languages: ->
+    ls = (a for a of @averages)
+    ls.sort()
+    ls
+
   drawList: ->
     t = @
     d3.select(@container).append("ul").selectAll("li")
-      .data(a for a of @averages)
+      .data(@languages())
       .enter().append("li")
       .text((d) -> d)
       .on "mouseover", (d) ->
