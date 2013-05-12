@@ -85,6 +85,14 @@ class CategoryStars
     @averages = @average.map data
     @flat_averages = (@flatten lng, avg for lng, avg of @averages)
 
+  spoke: () ->
+    t = @
+    (d) ->
+      avg = t.averages[d.lang]
+      cx = t.getX0(d) - t.getX0(avg)
+      cy = t.getY0(d) - t.getY0(avg)
+      "M 0 0 L #{cx} #{cy}"
+
 myStars = new CategoryStars
 
 byLanguage = d3.nest()
@@ -118,12 +126,6 @@ d3.csv "data.csv", (data) ->
 
   lang_benches = byLanguage.map data
 
-  spoke = (d) ->
-    avg = myStars.averages[d.lang]
-    cx = myStars.getX0(d) - myStars.getX0(avg)
-    cy = myStars.getY0(d) - myStars.getY0(avg)
-    "M 0 0 L #{cx} #{cy}"
-
   col = d3.select("#viz").selectAll(".col")
     .data(layout)
     .enter().append("div")
@@ -153,6 +155,6 @@ d3.csv "data.csv", (data) ->
   lines = star.selectAll("path")
     .data((d) -> lang_benches[d.lang])
     .enter().append("path")
-    .attr("d", spoke)
+    .attr("d", myStars.spoke())
 
   myStars.rect(focus).classed 'border', -> yes
