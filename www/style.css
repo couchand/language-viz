@@ -11,6 +11,16 @@
 svg {
   display: block; }
 
+.content {
+  max-width: 900px;
+  margin: 20px auto; }
+
+p {
+  clear: both;
+  max-width: 650px;
+  margin: 15px auto;
+  text-indent: 25px; }
+
 #describe, #selectable, #allstars, #lambdas, #categories {
   margin: 35px;
   display: block;
@@ -35,19 +45,26 @@ svg {
   #describe .obselete {
     font-size: 20px; }
 
-#selectable svg, #selectable ul {
-  float: left; }
-#selectable ul {
-  margin: 25px 25px;
-  max-height: 250px;
-  max-width: 400px;
-  font-size: 12px; }
-#selectable ul li {
-  float: left;
-  width: 50%; }
+#selectable {
+  height: 270px; }
+  #selectable svg, #selectable ul {
+    float: left; }
+  #selectable ul {
+    margin: 25px 25px;
+    max-height: 250px;
+    max-width: 400px;
+    font-size: 12px; }
+  #selectable ul li {
+    float: left;
+    width: 50%; }
 
 #allstars div, #lambdas div, #categories div {
   display: inline-block; }
+
+#allstars {
+  width: 1200px;
+  max-width: 1200px;
+  overflow: visible; }
 
 #lambdas .lambda {
   fill: #77ff88; }

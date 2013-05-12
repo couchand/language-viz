@@ -197,6 +197,7 @@
     __extends(LanguageGraphMatrix, _super);
 
     function LanguageGraphMatrix(w, h) {
+      var _ref;
       if (w == null) {
         w = 40;
       }
@@ -204,6 +205,14 @@
         h = 40;
       }
       LanguageGraphMatrix.__super__.constructor.call(this, w, h);
+      if ((_ref = this.margin) == null) {
+        this.margin = {
+          left: 40,
+          right: 40,
+          top: 10,
+          bottom: 10
+        };
+      }
       this.row_count = 5;
       this.languagesByX = d3.nest().key(this.x()).sortKeys(function(a, b) {
         return d3.ascending(parseFloat(a), parseFloat(b));
@@ -294,12 +303,7 @@
         data: function(d) {
           return d;
         },
-        margin: {
-          left: 40,
-          right: 40,
-          top: 10,
-          bottom: 10
-        },
+        margin: this.margin,
         title: {
           size: 10,
           padding: 5,
@@ -468,6 +472,8 @@
         h = 100;
       }
       AllStars.__super__.constructor.call(this, w, h);
+      this.margin.left = 30;
+      this.margin.right = 30;
     }
 
     AllStars.prototype.render = function(focus) {

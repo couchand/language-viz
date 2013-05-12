@@ -9,10 +9,21 @@
     <link href='style.css' rel='stylesheet' />
   </head>
   <body>
-    <div id='describe'></div>
-    <div id='selectable'></div>
-    <div id='allstars'></div>
-    <div id='lambdas'></div>
-    <div id='categories'></div>
+    <div class='content'>
+      <h2>d3 language benchmark visualizations</h2>
+      <p>After reading <a href='http://blog.gmarceau.qc.ca/2009/05/speed-size-and-dependability-of.html'>this blog post</a> by Guillaume Marceau I was inspired to recreate his visualizations using d3. Read more about the implementation in my response <a href='http://compiledthoughts.couchand.com/2013/05/d3-langauge-graphs-a-la-marceau'>here</a>.</p>
+      
+      <p>Marceau&#8217;s first graph overlays qualitative terms on a scatter plot of the benchmarks. This is easy to do with d3 and svg.</p>
+      <div class='viz' id='describe'></div>
+      <p>Marceau&#8217;s next graph shows a static picture of the performance star for the Scala programming language. My version highlights the interactivity of d3 with the language selection menu.</p>
+      <div class='viz' id='selectable'></div>
+      <p>Marceau then shows a matrix of all the languages&#8217; performance stars. This is not difficult to do in d3, but all the dots sure give my browser&#8217;s rendering engine a run for its money. If you have a suggestion on making this more efficient, please submit a pull request!</p>
+      <div class='viz' id='allstars'></div>
+      <p>Marceau introduces a small multiples chart of the performance stars. I think simplifying things by getting rid of the dots really brings out the character of the stars. Marceau chooses to color the backgrounds by the presence of lambda-like features, as well as highlighting the c languages.</p>
+      <div class='viz' id='lambdas'></div>
+      <p>I split things in a slightly more nuanced way, showing the divide between the four main camps. Feel free to argue with me about the distinctions.</p>
+      <div class='viz' id='categories'></div>
+      <p>That&#8217;s all for now. Fork and enjoy.</p>
+    </div>
   </body>
 </html>
