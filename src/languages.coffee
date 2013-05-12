@@ -152,6 +152,20 @@ class CategoryStars
       .enter().append("div")
       .classed("col", -> yes)
 
+  layoutCells: (col) ->
+    smallMultiples col,
+      width: @width
+      height: @height
+      margin:
+        left: 40
+        right: 40
+        top: 10
+        bottom: 10
+      title:
+        size: 10
+        padding: 5
+        data: @lang
+
 myStars = new CategoryStars
 
 d3.csv "data.csv", (data) ->
@@ -161,19 +175,7 @@ d3.csv "data.csv", (data) ->
   myStars.sortByLanguage data
 
   col = myStars.layoutColumns()
-
-  focus = smallMultiples col,
-    width: myStars.width
-    height: myStars.height
-    margin:
-      left: 40
-      right: 40
-      top: 10
-      bottom: 10
-    title:
-      size: 10
-      padding: 5
-      data: myStars.lang
+  focus = myStars.layoutCells col
 
   myStars.drawBackground focus
   myStars.drawStar focus
