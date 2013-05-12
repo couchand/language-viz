@@ -1,6 +1,10 @@
 .star path, .border {
   stroke: #444444; }
 
+.benchmark {
+  fill: #dd8888;
+  opacity: 0.6; }
+
 .border {
   fill: none; }
 

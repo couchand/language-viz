@@ -179,7 +179,7 @@
     LanguageGraph.prototype.drawDots = function(focus) {
       return focus.selectAll(".benchmark").data(this.data).enter().append("circle").classed("benchmark", function() {
         return true;
-      }).attr("r", 1.5).attr("fill", "#d88").attr("opacity", .6).attr("transform", this.moveTo());
+      }).attr("r", 1.5).attr("transform", this.moveTo());
     };
 
     LanguageGraph.prototype.drawBorder = function(focus) {
