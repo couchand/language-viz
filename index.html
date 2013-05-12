@@ -2,17 +2,15 @@
   <head>
     <title>language benchmark visualizations</title>
     <script src='https://raw.github.com/mbostock/d3/master/d3.min.js'></script>
-    <script type='text/javascript'>
-      //<![CDATA[
-        var module = {}
-      //]]>
-    </script>
+    <script src='smallMultiples.js'></script>
+    <script src='types.js'></script>
     <script src='languages.js'></script>
     <link href='style.css' rel='stylesheet' />
   </head>
   <body>
     <a href="https://github.com/couchand/language-viz"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub"></a>
-    <div id='viz'></div>
+    <div id='selectable'></div>
+    <div id='categories'></div>
     <script>
       //<![CDATA[
         var _gaq = _gaq || [];
