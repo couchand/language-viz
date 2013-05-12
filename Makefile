@@ -1,12 +1,13 @@
 # build the examples
 
-examples: data pages styles scripts resources
+examples: data pages styles scripts resources blog
 
 data: www/data.csv
 pages: www/index.html
 styles: www/style.css
 scripts: www/languages.js www/smallMultiples.js
 resources: www/types.js www/lambdas.js
+blog: www/blog.js www/blog.html www/blog_test.html
 
 www/data.csv:
 	curl http://benchmarksgame.alioth.debian.org/u32/summarydata.php > t.html
@@ -30,3 +31,12 @@ www/types.js: src/types.coffee
 
 www/lambdas.js: src/lambdas.coffee
 	coffee -cb -o www src/lambdas.coffee
+
+www/blog.js: src/blog.litcoffee
+	coffee -c -o www src/blog.litcoffee
+
+www/blog.html: src/blog.litcoffee
+	docco src/blog.litcoffee -l classic -o www
+
+www/blog_test.html: src/blog_test.haml
+	haml src/blog_test.haml > www/blog_test.html
