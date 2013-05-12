@@ -141,6 +141,12 @@ class CategoryStars
     cols = @matrixValues cols
     @matrixValues (@languagesByY.entries col for col in cols)
 
+  layoutColumns: ->
+    col = d3.select("#viz").selectAll(".col")
+      .data(@languagesByXThenY())
+      .enter().append("div")
+      .classed("col", -> yes)
+
 myStars = new CategoryStars
 
 d3.csv "data.csv", (data) ->
@@ -148,14 +154,9 @@ d3.csv "data.csv", (data) ->
   myStars.relativize data
   myStars.doAverage data
 
-  layout = myStars.languagesByXThenY()
-
   lang_benches = myStars.byLanguage().map data
 
-  col = d3.select("#viz").selectAll(".col")
-    .data(layout)
-    .enter().append("div")
-    .classed("col", -> yes)
+  col = myStars.layoutColumns()
 
   focus = smallMultiples col,
     width: myStars.width
