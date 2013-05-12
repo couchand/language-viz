@@ -17,6 +17,7 @@ class CategoryStars extends LanguageGraphMatrix
     super focus
 
 myStars = new CategoryStars
+myStars.container = "#categories"
 
 d3.csv "data.csv", (data) ->
   myStars.draw data

@@ -56,5 +56,7 @@ class SelectableStar extends LanguageGraph
 
 myStar = new SelectableStar()
 
+myStar.container = "#selectable"
+
 d3.csv "data.csv", (data) ->
   myStar.draw data
