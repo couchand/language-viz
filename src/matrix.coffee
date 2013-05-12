@@ -6,6 +6,12 @@ class LanguageGraphMatrix extends LanguageGraph
     h ?= 40
     super w, h
 
+    @margin ?=
+      left: 40
+      right: 40
+      top: 10
+      bottom: 10
+
     @row_count = 5
 
     @languagesByX = d3.nest()
@@ -48,11 +54,7 @@ class LanguageGraphMatrix extends LanguageGraph
       width: @width
       height: @height
       data: (d) -> d
-      margin:
-        left: 40
-        right: 40
-        top: 10
-        bottom: 10
+      margin: @margin
       title:
         size: 10
         padding: 5
