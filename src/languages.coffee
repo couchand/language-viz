@@ -81,6 +81,10 @@ class CategoryStars
     @scaleX.domain [0, 5000]
     @scaleY.domain [1, 6]
 
+  doAverage: (data) ->
+    @averages = @average.map data
+    @flat_averages = (@flatten lng, avg for lng, avg of @averages)
+
 myStars = new CategoryStars
 
 byLanguage = d3.nest()
@@ -108,21 +112,14 @@ languagesByXThenY = (a) ->
 d3.csv "data.csv", (data) ->
   myStars.clean data
   myStars.relativize data
+  myStars.doAverage data
 
-  #x.domain d3.extent data, getX
-  #y.domain d3.extent data, getY
-  #x.nice()
-  #y.nice()
-
-  averages = myStars.average.map data
-
-  flat_averages = (myStars.flatten lng, avg for lng, avg of averages)
-  layout = languagesByXThenY flat_averages
+  layout = languagesByXThenY myStars.flat_averages
 
   lang_benches = byLanguage.map data
 
   spoke = (d) ->
-    avg = averages[d.lang]
+    avg = myStars.averages[d.lang]
     cx = myStars.getX0(d) - myStars.getX0(avg)
     cy = myStars.getY0(d) - myStars.getY0(avg)
     "M 0 0 L #{cx} #{cy}"
@@ -150,7 +147,7 @@ d3.csv "data.csv", (data) ->
   star = focus.append("g")
     .classed("star", -> yes)
     .attr "transform", (d) ->
-      avg = averages[d.lang]
+      avg = myStars.averages[d.lang]
       "translate(#{myStars.getX0 avg},#{myStars.getY0 avg})"
 
   lines = star.selectAll("path")
