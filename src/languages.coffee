@@ -85,13 +85,19 @@ class CategoryStars
     @averages = @average.map data
     @flat_averages = (@flatten lng, avg for lng, avg of @averages)
 
-  spoke: () ->
+  spoke: ->
     t = @
     (d) ->
       avg = t.averages[d.lang]
       cx = t.getX0(d) - t.getX0(avg)
       cy = t.getY0(d) - t.getY0(avg)
       "M 0 0 L #{cx} #{cy}"
+
+  centerStar: ->
+    t = @
+    (d) ->
+      avg = t.averages[d.lang]
+      "translate(#{t.getX0 avg},#{t.getY0 avg})"
 
 myStars = new CategoryStars
 
@@ -148,9 +154,7 @@ d3.csv "data.csv", (data) ->
 
   star = focus.append("g")
     .classed("star", -> yes)
-    .attr "transform", (d) ->
-      avg = myStars.averages[d.lang]
-      "translate(#{myStars.getX0 avg},#{myStars.getY0 avg})"
+    .attr("transform", myStars.centerStar())
 
   lines = star.selectAll("path")
     .data((d) -> lang_benches[d.lang])
