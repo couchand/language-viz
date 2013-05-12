@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>d3 language graphs a la marceau</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+    <ul class="sections">
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h1">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <h1>d3 language graphs a la marceau</h1>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>The other day I came across <a href="http://blog.gmarceau.qc.ca/2009/05/speed-size-and-dependability-of.html" title="The speed, size and dependability of programming languages">this blog post</a> from
+Guillaume Marceau graphing data from the
+<a href="http://benchmarksgame.alioth.debian.org/" title="The Computer Language Benchmarks Game">Computer Language Benchmarks Game</a>.</p>
+<p>My first thought was, &quot;cool&quot;.  My next was, &quot;I should update
+this with recent data, and use d3&quot;.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>width = <span class="number">250</span>
+height = <span class="number">250</span>
+margin = <span class="number">100</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>So let&#39;s navigate over to the Benchmarks Game website and download
+the summary data.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>d3.csv <span class="string">"data.csv"</span>, (data) -&gt;
+    <span class="keyword">for</span> d <span class="keyword">in</span> data
+        d[<span class="string">"cpu(s)"</span>]  = parseFloat d[<span class="string">"cpu(s)"</span>]
+        d[<span class="string">"size(B)"</span>] = parseFloat d[<span class="string">"size(B)"</span>]</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <h2>the scatter plot</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>The first thing we notice is that the csv reports absolute numbers,
+but Marceau graphs relative ones, the number of times larger or
+longer running a program is than the best solution.  It&#39;s easy
+enough to ask d3 to do this conversion for us.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    best = d3.nest()
+        .key((d) -&gt; d.name)
+        .rollup (v) -&gt;
+            <span class="string">"cpu(s)"</span>:  d3.min v, (d) -&gt; d[<span class="string">"cpu(s)"</span>]
+            <span class="string">"size(B)"</span>: d3.min v, (d) -&gt; d[<span class="string">"size(B)"</span>]</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>Calculate the minimum size and time for each benchmark.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    mins = best.map data</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>Then scale the data accordingly.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">for</span> d <span class="keyword">in</span> data
+        d[<span class="string">"cpu(s)"</span>]  = d[<span class="string">"cpu(s)"</span>]  / mins[d.name][<span class="string">"cpu(s)"</span>]
+        d[<span class="string">"size(B)"</span>] = d[<span class="string">"size(B)"</span>] / mins[d.name][<span class="string">"size(B)"</span>]</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>Great.  Let&#39;s draw a basic scatter plot.  We&#39;ll scale the domain
+manually to exclude the outliers.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    scaleX = d3.scale.sqrt().domain([<span class="number">0</span>, <span class="number">5000</span>]).rangeRound([<span class="number">0</span>,  width])
+    scaleY = d3.scale.sqrt().domain([<span class="number">1</span>,    <span class="number">6</span>]).rangeRound([height, <span class="number">0</span>])
+
+    <span class="function"><span class="title">x</span></span> = (d) -&gt; scaleX d[<span class="string">"cpu(s)"</span>]
+    <span class="function"><span class="title">y</span></span> = (d) -&gt; scaleY d[<span class="string">"size(B)"</span>]</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>Now add a dot for each benchmark data point.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    focus = createCanvas()
+
+    focus.selectAll(<span class="string">".benchmark"</span>)
+        .data(data)
+        .enter().append(<span class="string">"circle"</span>)
+        .attr(<span class="string">"class"</span>, <span class="string">"benchmark"</span>)
+        .attr(<span class="string">"r"</span>, <span class="number">2</span>)
+        .attr <span class="string">"transform"</span>, (d) -&gt;
+            <span class="string">"translate(<span class="subst">#{x d}</span>,<span class="subst">#{y d}</span>)"</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <h2>performance stars</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>On top of the scatter plot we want to draw a star.  The center of the
+star is the average of the benchmarks, so first we&#39;ll rollup the
+benchmark data.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    average = d3.nest()
+        .key((d) -&gt; d.lang)
+        .rollup (v) -&gt;
+            <span class="string">"cpu(s)"</span>:  d3.mean v, (d) -&gt; d[<span class="string">"cpu(s)"</span>]
+            <span class="string">"size(B)"</span>: d3.mean v, (d) -&gt; d[<span class="string">"size(B)"</span>]
+
+    averages = average.map data</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p>We&#39;ll only show the star for the currently selected language, so
+let&#39;s sort the benchmark results by language.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    benchmarks = d3.nest()
+        .key((d) -&gt; d.lang)
+        .map data</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p>Now we have everything we need to draw the star for some language.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="function"><span class="title">showLanguageStar</span></span> = (lang) -&gt;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <p>First we get the average performance for this language.  We add an
+svg group and move it to the average position.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        avg = averages[lang]
+
+        focus.select(<span class="string">".star"</span>).remove()
+
+        star = focus.append(<span class="string">"g"</span>)
+            .attr(<span class="string">"class"</span>, <span class="string">"star"</span>)
+            .attr(<span class="string">"transform"</span>, <span class="string">"translate(<span class="subst">#{x avg}</span>,<span class="subst">#{y avg}</span>)"</span>)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <p>Then we append a spoke for each benchmark data point of the
+selected language.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        star.selectAll(<span class="string">"path"</span>)
+            .data(  benchmarks[lang] )
+            .enter().append(<span class="string">"path"</span>)
+            .attr <span class="string">"d"</span>, (d) -&gt;
+                <span class="string">"M 0,0 L <span class="subst">#{x(d) - x(avg)}</span>,<span class="subst">#{y(d) - y(avg)}</span>"</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <p>We set the default language on page load.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    showLanguageStar <span class="string">"JavaScript V8"</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <p>Finally we need a list of languages to select from.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    languages = (name <span class="keyword">for</span> name <span class="keyword">of</span> averages)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-18">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <p>Whenever we mouseover the name of a language, call <code>showLanguageStar</code> to
+redraw the star.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    d3.select(<span class="string">"body"</span>).append(<span class="string">"ul"</span>).selectAll(<span class="string">"li"</span>)
+        .data(languages)
+        .enter().append(<span class="string">"li"</span>)
+        .text((d) -&gt; d)
+        .<span class="literal">on</span> <span class="string">"mouseover"</span>, showLanguageStar</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-19">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+              <h2>boilerplate</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-20">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-20">&#182;</a>
+              </div>
+              <p>Create an svg canvas with a little frame and clip path.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="function"><span class="title">createCanvas</span></span> = -&gt;
+
+    svg = d3.select(<span class="string">"body"</span>).append(<span class="string">"svg"</span>)
+        .attr(<span class="string">"width"</span>, width + <span class="number">2</span>*margin)
+        .attr(<span class="string">"height"</span>, height + <span class="number">2</span>*margin)
+        .append(<span class="string">"g"</span>)
+        .attr(<span class="string">"transform"</span>, <span class="string">"translate(<span class="subst">#{margin}</span>,<span class="subst">#{margin}</span>)"</span>)
+
+    svg.append(<span class="string">"defs"</span>).append(<span class="string">"clipPath"</span>)
+        .attr(<span class="string">"id"</span>, <span class="string">"clip"</span>)
+        .append(<span class="string">"rect"</span>)
+        .attr(<span class="string">"width"</span>, width)
+        .attr(<span class="string">"height"</span>, height)
+
+    svg.append(<span class="string">"g"</span>)
+        .attr(<span class="string">"clip-path"</span>, <span class="string">"url(#clip)"</span>)</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>
