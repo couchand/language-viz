@@ -17,8 +17,8 @@ www/index.html: src/index.haml
 www/style.css: src/style.sass
 	sass src/style.sass www/style.css
 
-www/languages.js: src/languages.coffee
-	coffee -c -o www -j src/graph.coffee src/languages.coffee
+www/languages.js: src/graph.coffee src/matrix.coffee src/languages.coffee
+	coffee -c -o www -j languages src/graph.coffee src/matrix.coffee src/languages.coffee
 
 www/smallMultiples.js: src/smallMultiples.coffee
 	coffee -cb -o www src/smallMultiples.coffee
