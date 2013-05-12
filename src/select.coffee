@@ -20,8 +20,12 @@ class SelectableStar extends LanguageGraph
     @canvas.datum
       lang: lang
 
-  drawDots: (focus) ->
+  moveTo: ->
     t = @
+    (d) ->
+      "translate(#{t.getX0 d},#{t.getY0 d})"
+
+  drawDots: (focus) ->
     focus.selectAll(".benchmark")
       .data(@data)
       .enter().append("circle")
@@ -29,9 +33,7 @@ class SelectableStar extends LanguageGraph
       .attr("r", 1.5)
       .attr("fill", "#d88")
       .attr("opacity", .6)
-      .attr "transform", (d) ->
-        return if isNaN t.getX d or isNaN t.getY d
-        "translate(#{t.getX0 d},#{t.getY0 d})"
+      .attr("transform", @moveTo())
 
   languages: ->
     ls = (a for a of @averages)
