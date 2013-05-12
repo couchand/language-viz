@@ -104,6 +104,12 @@ class CategoryStars
   drawBorder: (focus) ->
     @rect(focus).classed('border', -> yes)
 
+  drawLines: (lang_benches, star) ->
+    star.selectAll("path")
+      .data((d) -> lang_benches[d.lang])
+      .enter().append("path")
+      .attr("d", @spoke())
+
 myStars = new CategoryStars
 
 byLanguage = d3.nest()
@@ -161,9 +167,6 @@ d3.csv "data.csv", (data) ->
     .classed("star", -> yes)
     .attr("transform", myStars.centerStar())
 
-  lines = star.selectAll("path")
-    .data((d) -> lang_benches[d.lang])
-    .enter().append("path")
-    .attr("d", myStars.spoke())
+  myStars.drawLines lang_benches, star
 
   myStars.drawBorder focus
