@@ -84,9 +84,9 @@ class LanguageGraph
     @rect(focus).classed('border', -> yes)
 
   benchmarksForLanguage: ->
-    t = @
+    lang_benches = d3.nest().key((d) -> d.lang).map data
     (d) ->
-      t.lang_benches[d.lang]
+      lang_benches[d.lang]
 
   drawLines: (star) ->
     t = @
@@ -101,9 +101,6 @@ class LanguageGraph
       .attr("transform", @centerStar())
 
     @drawLines star
-
-  sortByLanguage: (data) ->
-    @lang_benches = d3.nest().key((d) -> d.lang).map data
 
   doAverage: (data) ->
     @averages = @average.map data

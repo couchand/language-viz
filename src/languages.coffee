@@ -75,7 +75,6 @@ class CategoryStars extends LanguageGraph
   draw: (data) ->
     @initialize data
     @flattenAverages()
-    @sortByLanguage data
 
     focus = @createLayout()
 
