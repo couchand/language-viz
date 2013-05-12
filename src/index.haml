@@ -13,21 +13,21 @@
       %h2<
         d3 language benchmark visualizations
       :markdown
-          After reading [this blog post](http://blog.gmarceau.qc.ca/2009/05/speed-size-and-dependability-of.html) by Guillaume Marceau I was inspired to recreate his visualizations using d3.  Read more about the implementation in my response [here](http://compiledthoughts.couchand.com/2013/05/d3-langauge-graphs-a-la-marceau).
+          After reading [this blog post](http://blog.gmarceau.qc.ca/2009/05/speed-size-and-dependability-of.html) by Guillaume Marceau I was inspired to recreate his visualizations using d3.  Read more about the implementation in my response post [here](http://compiledthoughts.couchand.com/2013/05/d3-langauge-graphs-a-la-marceau).
 
-          Marceau's first graph overlays qualitative terms on a scatter plot of the benchmarks.  This is easy to do with d3 and svg.
+          Marceau's first graph overlays qualitative terms on a scatter plot of the benchmarks.  This is easy enough to do with d3 and svg.
       #describe.viz
       :markdown
-          Marceau's next graph shows a static picture of the performance star for the Scala programming language.  My version highlights the interactivity of d3 with the language selection menu.
+          His next graph shows a static picture of the performance star for the Scala programming language.  My version highlights the interactivity of d3 with a language selection menu.
       #selectable.viz
       :markdown
-          Marceau then shows a matrix of all the languages' performance stars.  This is not difficult to do in d3, but all the dots sure give my browser's rendering engine a run for its money.  If you have a suggestion on making this more efficient, please submit a pull request!
+          Marceau then shows a matrix of all the languages' performance stars.  This is not difficult to do in d3, but all these dots sure give my browser's rendering engine a run for its money.  If you have a suggestion on making this more efficient, please do submit a pull request.
       #allstars.viz
       :markdown
           Marceau introduces a small multiples chart of the performance stars.  I think simplifying things by getting rid of the dots really brings out the character of the stars.  Marceau chooses to color the backgrounds by the presence of lambda-like features, as well as highlighting the c languages.
       #lambdas.viz
       :markdown
-          I split things in a slightly more nuanced way, showing the divide between the four main camps.  Feel free to argue with me about the distinctions.
+          My version splits them a little differently.  Feel free to argue with me about the distinctions.
       #categories.viz
       :markdown
           That's all for now.  Fork and enjoy.
