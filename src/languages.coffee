@@ -71,6 +71,7 @@ class CategoryStars
       @setX d, parseFloat @getX d
       @setY d, parseFloat @getY d
 
+  relativize: (data) ->
     mins = @best.map data
 
     for d in data
@@ -106,6 +107,7 @@ languagesByXThenY = (a) ->
 
 d3.csv "data.csv", (data) ->
   myStars.clean data
+  myStars.relativize data
 
   #x.domain d3.extent data, getX
   #y.domain d3.extent data, getY
