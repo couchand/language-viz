@@ -7,7 +7,7 @@
 svg {
   display: block; }
 
-#selectable, #lambdas, #categories {
+#selectable, #allstars, #lambdas, #categories {
   margin: 35px;
   display: block;
   clear: both; }
@@ -23,8 +23,9 @@ svg {
   float: left;
   width: 50%; }
 
-#lambdas div {
+#allstars div, #lambdas div, #categories div {
   display: inline-block; }
+
 #lambdas .lambda {
   fill: #77ff88; }
 #lambdas .c {
@@ -32,8 +33,6 @@ svg {
 #lambdas .other {
   fill: #cccccc; }
 
-#categories div {
-  display: inline-block; }
 #categories .imperative {
   fill: #66ddaa; }
 #categories .oo {
