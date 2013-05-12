@@ -19,8 +19,8 @@ www/index.html: src/index.haml
 www/style.css: src/style.sass
 	sass src/style.sass www/style.css
 
-www/languages.js: src/graph.coffee src/matrix.coffee src/select.coffee src/categories.coffee src/lambda.coffee
-	coffee -c -o www -j languages src/graph.coffee src/matrix.coffee src/select.coffee src/categories.coffee src/lambda.coffee
+www/languages.js: src/graph.coffee src/matrix.coffee src/select.coffee src/categories.coffee src/lambda.coffee src/all.coffee
+	coffee -c -o www -j languages src/graph.coffee src/matrix.coffee src/select.coffee src/categories.coffee src/lambda.coffee src/all.coffee
 
 www/smallMultiples.js: src/smallMultiples.coffee
 	coffee -cb -o www src/smallMultiples.coffee

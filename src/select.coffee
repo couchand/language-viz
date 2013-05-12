@@ -53,10 +53,3 @@ class SelectableStar extends LanguageGraph
     @drawDots focus
     @drawStar focus
     @drawList()
-
-myStar = new SelectableStar()
-
-myStar.container = "#selectable"
-
-d3.csv "data.csv", (data) ->
-  myStar.draw data
