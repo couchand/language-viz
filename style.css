@@ -1,16 +1,66 @@
 .star path, .border {
   stroke: #444444; }
 
+.benchmark {
+  fill: #dd8888;
+  opacity: 0.6; }
+
 .border {
   fill: none; }
 
 svg {
   display: block; }
 
+#describe, #selectable, #allstars, #lambdas, #categories {
+  margin: 35px;
+  display: block;
+  clear: both; }
+
+#describe {
+  font-family: sans-serif; }
+  #describe .axes {
+    fill: #555555;
+    font-size: 12px;
+    font-weight: bold; }
+  #describe .ideal, #describe .system, #describe .script, #describe .obselete {
+    fill: #339922;
+    opacity: 0.6;
+    font-weight: bold; }
+  #describe .ideal {
+    font-size: 32px; }
+  #describe .system {
+    font-size: 28px; }
+  #describe .script {
+    font-size: 24px; }
+  #describe .obselete {
+    font-size: 20px; }
+
 #selectable svg, #selectable ul {
   float: left; }
 #selectable ul {
+  margin: 25px 25px;
+  max-height: 250px;
+  max-width: 400px;
   font-size: 12px; }
+#selectable ul li {
+  float: left;
+  width: 50%; }
 
-#categories div {
+#allstars div, #lambdas div, #categories div {
   display: inline-block; }
+
+#lambdas .lambda {
+  fill: #77ff88; }
+#lambdas .c {
+  fill: #88ccff; }
+#lambdas .other {
+  fill: #cccccc; }
+
+#categories .imperative {
+  fill: #66ddaa; }
+#categories .oo {
+  fill: #9977ee; }
+#categories .functional {
+  fill: #ffee77; }
+#categories .scripting {
+  fill: #ffaa77; }
