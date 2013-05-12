@@ -53,15 +53,15 @@ class LanguageGraph
       t.setY m, d3[f] v, myStars.y()
       m
 
-  clean: (data) ->
-    for d in data
+  clean: ->
+    for d in @data
       @setX d, parseFloat @getX d
       @setY d, parseFloat @getY d
 
-  relativize: (data) ->
-    mins = @best.map data
+  relativize:->
+    mins = @best.map @data
 
-    for d in data
+    for d in @data
       @setX d, @getX(d) / @getX(mins[d.name])
       @setY d, @getY(d) / @getY(mins[d.name])
 
@@ -83,7 +83,7 @@ class LanguageGraph
     @rect(focus).classed('border', -> yes)
 
   benchmarksForLanguage: ->
-    lang_benches = d3.nest().key((d) -> d.lang).map data
+    lang_benches = d3.nest().key((d) -> d.lang).map @data
     (d) ->
       lang_benches[d.lang]
 
@@ -101,10 +101,14 @@ class LanguageGraph
 
     @drawLines star
 
-  doAverage: (data) ->
-    @averages = @average.map data
+  doAverage: ->
+    @averages = @average.map @data
 
   initialize: (data) ->
-    @clean data
-    @relativize data
-    @doAverage data
+    @setData data
+    @clean()
+    @relativize()
+    @doAverage()
+
+  setData: (data) ->
+    @data = data
