@@ -4,7 +4,13 @@
 .border {
   fill: none; }
 
-#viz div {
-  display: inline-block; }
-#viz svg {
+svg {
   display: block; }
+
+#selectable svg, #selectable ul {
+  float: left; }
+#selectable ul {
+  font-size: 12px; }
+
+#categories div {
+  display: inline-block; }

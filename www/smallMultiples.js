@@ -2,30 +2,37 @@
 var smallMultiples;
 
 smallMultiples = function(container, options) {
-  var clip, fh, focus, fw, h, ml, mt, svg, td, ts, w;
+  var clip, d, fh, focus, fw, h, ml, mt, s, svg, td, ts, w, _ref, _ref1, _ref10, _ref11, _ref2, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8, _ref9;
   w = options.width || 0;
-  w += options.margin.left || 0;
-  w += options.margin.right || 0;
+  w += ((_ref = options.margin) != null ? _ref.left : void 0) || 0;
+  w += ((_ref1 = options.margin) != null ? _ref1.right : void 0) || 0;
   h = options.height || 0;
-  h += options.margin.top || 0;
-  h += options.margin.bottom || 0;
-  h += options.title.size || 0;
-  h += options.title.padding || 0;
-  ml = options.margin.left || 0;
-  mt = options.margin.top || 0;
-  mt += options.title.height || 0;
-  mt += options.title.padding || 0;
+  h += ((_ref2 = options.margin) != null ? _ref2.top : void 0) || 0;
+  h += ((_ref3 = options.margin) != null ? _ref3.bottom : void 0) || 0;
+  h += ((_ref4 = options.title) != null ? _ref4.size : void 0) || 0;
+  h += ((_ref5 = options.title) != null ? _ref5.padding : void 0) || 0;
+  ml = ((_ref6 = options.margin) != null ? _ref6.left : void 0) || 0;
+  mt = ((_ref7 = options.margin) != null ? _ref7.top : void 0) || 0;
+  mt += ((_ref8 = options.title) != null ? _ref8.height : void 0) || 0;
+  mt += ((_ref9 = options.title) != null ? _ref9.padding : void 0) || 0;
   fw = options.width || 0;
   fh = options.height || 0;
-  ts = options.title.size || 0;
-  td = options.title.data || function() {
+  ts = ((_ref10 = options.title) != null ? _ref10.size : void 0) || 0;
+  td = ((_ref11 = options.title) != null ? _ref11.data : void 0) || function() {
     return '';
   };
-  svg = container.selectAll("svg").data(function(d) {
-    return d;
-  }).enter().append("svg").attr("width", w).attr("height", h).append("g").attr("transform", "translate(" + ml + "," + mt + ")");
-  svg.append("title").text(td);
-  svg.append("text").attr("x", fw / 2).attr("y", -4).style("font-size", ts).attr("text-anchor", "middle").text(td);
+  d = options.data;
+  s = container;
+  if (d != null) {
+    s = s.selectAll("svg").data(d).enter();
+  }
+  svg = s.append("svg").attr("width", w).attr("height", h).append("g").attr("transform", "translate(" + ml + "," + mt + ")");
+  if (td) {
+    svg.append("title").text(td);
+  }
+  if (td) {
+    svg.append("text").attr("x", fw / 2).attr("y", -4).style("font-size", ts).attr("text-anchor", "middle").text(td);
+  }
   clip = svg.append("defs").append("clipPath").attr("id", function(d, i) {
     return "clip" + i;
   }).append("rect").attr("width", fw).attr("height", fh);
