@@ -169,7 +169,5 @@ d3.csv "data.csv", (data) ->
       data: myStars.lang
 
   myStars.drawBackground focus
-
   myStars.drawStar lang_benches, focus
-
   myStars.drawBorder focus
