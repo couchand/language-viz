@@ -6,6 +6,8 @@ class CategoryStars
     @height ?= 40
     @row_count = 5
 
+    @container = "#viz"
+
     @x_column = "cpu(s)"
     @y_column = "size(B)"
     @scaleX.rangeRound [0, @width]
@@ -147,7 +149,7 @@ class CategoryStars
     @matrixValues (@languagesByY.entries col for col in cols)
 
   layoutColumns: ->
-    d3.select("#viz").selectAll(".col")
+    d3.select(@container).selectAll(".col")
       .data(@languagesByXThenY())
       .enter().append("div")
       .classed("col", -> yes)
