@@ -1,6 +1,6 @@
 # language visualizations
 
-class CategoryStars extends LanguageGraph
+class LanguageGraphMatrix extends LanguageGraph
   constructor: (w, h) ->
     w ?= 40
     h ?= 40
@@ -11,14 +11,6 @@ class CategoryStars extends LanguageGraph
     @languagesByX.key @.x()
     @languagesByY.key @.y()
 
-  typeColor: d3.scale.ordinal()
-      .domain(['imperative', 'oo', 'functional', 'scripting'])
-      .range(['#6da', '#97e', '#fe7', '#fa7'])
-
-  background: ->
-    t = @
-    (d) -> t.typeColor types[d.lang]
-
   flatten: (lng, avg) ->
     m = {}
     m.lang = lng
@@ -28,9 +20,6 @@ class CategoryStars extends LanguageGraph
 
   flattenAverages: ->
     @flat_averages = (@flatten lng, avg for lng, avg of @averages)
-
-  drawBackground: (focus) ->
-    @rect(focus).attr("fill", @background())
 
   languagesByX: d3.nest()
       .sortKeys((a,b) -> d3.ascending parseFloat(a), parseFloat(b))
@@ -77,10 +66,27 @@ class CategoryStars extends LanguageGraph
     @flattenAverages()
 
     focus = @createLayout()
+    @render focus
 
-    @drawBackground focus
+  render: (focus) ->
     @drawStar focus
     @drawBorder focus
+
+class CategoryStars extends LanguageGraphMatrix
+  typeColor: d3.scale.ordinal()
+      .domain(['imperative', 'oo', 'functional', 'scripting'])
+      .range(['#6da', '#97e', '#fe7', '#fa7'])
+
+  background: ->
+    t = @
+    (d) -> t.typeColor types[d.lang]
+
+  drawBackground: (focus) ->
+    @rect(focus).attr("fill", @background())
+
+  render: (focus) ->
+    @drawBackground focus
+    super focus
 
 myStars = new CategoryStars
 
