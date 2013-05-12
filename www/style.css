@@ -11,10 +11,29 @@
 svg {
   display: block; }
 
-#selectable, #allstars, #lambdas, #categories {
+#describe, #selectable, #allstars, #lambdas, #categories {
   margin: 35px;
   display: block;
   clear: both; }
+
+#describe {
+  font-family: sans-serif; }
+  #describe .axes {
+    fill: #555555;
+    font-size: 12px;
+    font-weight: bold; }
+  #describe .ideal, #describe .system, #describe .script, #describe .obselete {
+    fill: #339922;
+    opacity: 0.6;
+    font-weight: bold; }
+  #describe .ideal {
+    font-size: 32px; }
+  #describe .system {
+    font-size: 28px; }
+  #describe .script {
+    font-size: 24px; }
+  #describe .obselete {
+    font-size: 20px; }
 
 #selectable svg, #selectable ul {
   float: left; }
