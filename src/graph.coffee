@@ -7,18 +7,17 @@ class LanguageGraph
     @x_column = "cpu(s)"
     @y_column = "size(B)"
 
-    @scaleX.rangeRound [0, @width]
-    @scaleY.rangeRound [@height, 0]
-
     @average = @rollup 'lang', 'mean'
     @best = @rollup 'name', 'min'
 
-  lang: (d) -> d.lang
+    @scaleX = d3.scale.sqrt()
+      .domain([0, 5000])
+      .rangeRound([0, @width])
+    @scaleY = d3.scale.sqrt()
+      .domain([1, 6])
+      .rangeRound([@height, 0])
 
-  scaleX: d3.scale.sqrt()
-    .domain [0, 5000]
-  scaleY: d3.scale.sqrt()
-    .domain [1, 6]
+  lang: (d) -> d.lang
 
   getX: (d) -> d[@x_column]
   getY: (d) -> d[@y_column]
