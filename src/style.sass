@@ -13,10 +13,32 @@
 svg
     display: block
 
-#selectable, #allstars, #lambdas, #categories
+#describe, #selectable, #allstars, #lambdas, #categories
     margin: 35px
     display: block
     clear: both
+
+#describe
+    font-family: sans-serif
+
+    .axes
+        fill: #555
+        font-size: 12px
+        font-weight: bold
+
+    .ideal, .system, .script, .obselete
+        fill: #392
+        opacity: .6
+        font-weight: bold
+
+    .ideal
+        font-size: 32px
+    .system
+        font-size: 28px
+    .script
+        font-size: 24px
+    .obselete
+        font-size: 20px
 
 #selectable
     svg, ul
