@@ -49,8 +49,8 @@ class LanguageGraph
     t = @
     (v) ->
       m = {}
-      t.setX m, d3[f] v, myStars.x()
-      t.setY m, d3[f] v, myStars.y()
+      t.setX m, d3[f] v, t.x()
+      t.setY m, d3[f] v, t.y()
       m
 
   initialize: (data) ->

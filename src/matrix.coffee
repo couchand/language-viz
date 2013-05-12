@@ -48,6 +48,7 @@ class LanguageGraphMatrix extends LanguageGraph
     smallMultiples col,
       width: @width
       height: @height
+      data: (d) -> d
       margin:
         left: 40
         right: 40
