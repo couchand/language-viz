@@ -107,22 +107,27 @@ class CategoryStars
   drawBorder: (focus) ->
     @rect(focus).classed('border', -> yes)
 
-  drawLines: (lang_benches, star) ->
+  benchmarksForLanguage: ->
+    t = @
+    (d) ->
+      t.lang_benches[d.lang]
+
+  drawLines: (star) ->
+    t = @
     star.selectAll("path")
-      .data((d) -> lang_benches[d.lang])
+      .data(@benchmarksForLanguage())
       .enter().append("path")
       .attr("d", @spoke())
 
-  drawStar: (lang_benches, focus) ->
+  drawStar: (focus) ->
     star = focus.append("g")
       .classed("star", -> yes)
       .attr("transform", @centerStar())
 
-    @drawLines lang_benches, star
+    @drawLines star
 
-  byLanguage: ->
-    d3.nest()
-      .key(myStars.lang)
+  sortByLanguage: (data) ->
+    @lang_benches = d3.nest().key((d) -> d.lang).map data
 
   languagesByX: d3.nest()
       .sortKeys((a,b) -> d3.ascending parseFloat(a), parseFloat(b))
@@ -153,8 +158,7 @@ d3.csv "data.csv", (data) ->
   myStars.clean data
   myStars.relativize data
   myStars.doAverage data
-
-  lang_benches = myStars.byLanguage().map data
+  myStars.sortByLanguage data
 
   col = myStars.layoutColumns()
 
@@ -172,5 +176,5 @@ d3.csv "data.csv", (data) ->
       data: myStars.lang
 
   myStars.drawBackground focus
-  myStars.drawStar lang_benches, focus
+  myStars.drawStar focus
   myStars.drawBorder focus
