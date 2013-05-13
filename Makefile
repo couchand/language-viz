@@ -36,7 +36,8 @@ www/blog.js: src/blog.litcoffee
 	coffee -c -o www src/blog.litcoffee
 
 www/blog.html: src/blog.litcoffee
-	docco src/blog.litcoffee -l linear -o www
+	docco src/blog.litcoffee -o www
+# -l linear
 
 www/blog_test.html: src/blog_test.haml
 	haml src/blog_test.haml > www/blog_test.html

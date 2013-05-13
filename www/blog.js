@@ -9,7 +9,7 @@
   margin = 100;
 
   d3.csv("data.csv", function(data) {
-    var average, averages, benchmarks, best, d, focus, languages, mins, name, scaleX, scaleY, showLanguageStar, x, y, _i, _j, _len, _len1;
+    var average, averages, benchmarks, best, d, focus, language_list, languages, mins, name, scaleX, scaleY, showLanguageStar, star, x, y, _i, _j, _len, _len1;
 
     for (_i = 0, _len = data.length; _i < _len; _i++) {
       d = data[_i];
@@ -34,7 +34,7 @@
       d["cpu(s)"] = d["cpu(s)"] / mins[d.name]["cpu(s)"];
       d["size(B)"] = d["size(B)"] / mins[d.name]["size(B)"];
     }
-    scaleX = d3.scale.sqrt().domain([0, 5000]).rangeRound([0, width]);
+    scaleX = d3.scale.sqrt().domain([1, 5000]).rangeRound([0, width]);
     scaleY = d3.scale.sqrt().domain([1, 6]).rangeRound([height, 0]);
     x = function(d) {
       return scaleX(d["cpu(s)"]);
@@ -62,20 +62,23 @@
     benchmarks = d3.nest().key(function(d) {
       return d.lang;
     }).map(data);
+    star = focus.append("g").attr("class", "star");
     showLanguageStar = function(lang) {
-      var avg, star;
+      var avg, lines;
 
       avg = averages[lang];
-      focus.select(".star").remove();
-      star = focus.append("g").attr("class", "star").attr("transform", "translate(" + (x(avg)) + "," + (y(avg)) + ")");
-      return star.selectAll("line").data(benchmarks[lang]).enter().append("line").attr("x2", function(d) {
+      star.transition().attr("transform", "translate(" + (x(avg)) + "," + (y(avg)) + ")");
+      lines = star.selectAll("line").data(benchmarks[lang]);
+      lines.enter().append("line");
+      lines.transition().attr("x2", function(d) {
         return x(d) - x(avg);
       }).attr("y2", function(d) {
         return y(d) - y(avg);
       });
+      return lines.exit().remove();
     };
     showLanguageStar("JavaScript V8");
-    languages = (function() {
+    language_list = (function() {
       var _results;
 
       _results = [];
@@ -84,9 +87,11 @@
       }
       return _results;
     })();
-    return d3.select("body").append("ul").selectAll("li").data(languages).enter().append("li").text(function(d) {
+    language_list.sort();
+    languages = d3.select("body").append("ul").selectAll("li").data(language_list).enter().append("li").text(function(d) {
       return d;
-    }).on("mouseover", showLanguageStar);
+    });
+    return languages.on("mouseover", showLanguageStar);
   });
 
   createCanvas = function() {
