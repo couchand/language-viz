@@ -149,6 +149,7 @@ Finally we'll create the ui.  We want the user to be able to choose
 a language, so we'll need a list of languages to select from.
 
         language_list = (name for name of averages)
+        language_list.sort()
 
         languages = d3.select("body")
             .append("ul").selectAll("li")
