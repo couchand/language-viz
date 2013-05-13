@@ -125,11 +125,11 @@ svg group and move it to the average position.
 Then we append a spoke for each benchmark data point of the
 selected language.
 
-            star.selectAll("path")
+            star.selectAll("line")
                 .data( benchmarks[lang] )
-                .enter().append("path")
-                .attr "d", (d) ->
-                    "M 0,0 L #{x(d) - x(avg)},#{y(d) - y(avg)}"
+                .enter().append("line")
+                .attr("x2", (d) -> x(d) - x(avg))
+                .attr("y2", (d) -> y(d) - y(avg))
 
 We set the default language on page load.
 
