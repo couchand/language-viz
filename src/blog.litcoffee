@@ -108,30 +108,37 @@ let's also sort the benchmark results by language.
             .key((d) -> d.lang)
             .map data
 
-Now we have everything we need to draw the star.  We'll declare a
-local function so we can update it.
+Now we have everything we need to draw the star.  We'll create an
+svg group to work with in a moment.
+
+        star = focus.append("g")
+            .attr("class", "star")
+
+We'll declare a local function so we can easily update it.
 
         showLanguageStar = (lang) ->
 
-First we get the average performance for this language.  We'll create
-an svg group and move it to that average position.
+First we get the average performance for this language and move the
+star group to that position.
 
             avg = averages[lang]
 
-            focus.select(".star").remove()
-
-            star = focus.append("g")
-                .attr("class", "star")
+            star.transition()
                 .attr("transform", "translate(#{x avg},#{y avg})")
 
 Then we append a spoke for each benchmark data point of the
-selected language.
+selected language, update existing lines, and remove exiting spokes.
 
-            star.selectAll("line")
+            lines = star.selectAll("line")
                 .data( benchmarks[lang] )
-                .enter().append("line")
+
+            lines.enter().append("line")
+
+            lines.transition()
                 .attr("x2", (d) -> x(d) - x(avg))
                 .attr("y2", (d) -> y(d) - y(avg))
+
+            lines.exit().remove()
 
 Set the default language on page load.
 
