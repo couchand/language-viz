@@ -61,19 +61,19 @@ the data accordingly.
 
 Great.  Let's draw a basic scatter plot.  We'll scale the domain
 manually to exclude the outliers.  Framing our plot this way
-highlights an interesting fact about this data: other than those
-outliers, the largest programs only take about six times the space
-of the most optimum.  However, the slowest programs run for five
-thousand times longer than the fastest.
+highlights an interesting fact about the data: other than those
+outliers, the largest programs only take a few times the space of the
+most optimum solution.  However, the slowest programs run for thousands
+of times longer than the fastest.
 
-        scaleX = d3.scale.sqrt().domain([0, 5000]).rangeRound([0,  width])
+        scaleX = d3.scale.sqrt().domain([1, 5000]).rangeRound([0,  width])
         scaleY = d3.scale.sqrt().domain([1,    6]).rangeRound([height, 0])
 
         x = (d) -> scaleX d["cpu(s)"]
         y = (d) -> scaleY d["size(B)"]
 
 Now add a dot for each benchmark data point.  The x-coordinate is
-the benchmark relative speed, and the y-coordinate the relative size.
+the relative speed, and the y-coordinate the relative size.
 
         focus = createCanvas()
 
@@ -88,9 +88,10 @@ the benchmark relative speed, and the y-coordinate the relative size.
 performance stars
 -----------------
 
-On top of the scatter plot we want to draw a star.  The center of the
-star is the average of the benchmarks, so first we'll rollup the
-benchmark data.
+On top of the scatter plot we'll to draw a star showing the
+performance of a particular language.  The center of the star is the
+average of the benchmarks, so first we'll rollup the data points by
+language.
 
         average = d3.nest()
             .key((d) -> d.lang)
@@ -101,18 +102,19 @@ benchmark data.
         averages = average.map data
 
 We'll only show the star for the currently selected language, so
-let's sort the benchmark results by language.
+let's also sort the benchmark results by language.
 
         benchmarks = d3.nest()
             .key((d) -> d.lang)
             .map data
 
-Now we have everything we need to draw the star for some language.
+Now we have everything we need to draw the star.  We'll declare a
+local function so we can update it.
 
         showLanguageStar = (lang) ->
 
-First we get the average performance for this language.  We add an
-svg group and move it to the average position.
+First we get the average performance for this language.  We'll create
+an svg group and move it to that average position.
 
             avg = averages[lang]
 
@@ -131,22 +133,26 @@ selected language.
                 .attr("x2", (d) -> x(d) - x(avg))
                 .attr("y2", (d) -> y(d) - y(avg))
 
-We set the default language on page load.
+Set the default language on page load.
 
         showLanguageStar "JavaScript V8"
 
-Finally we need a list of languages to select from.
 
-        languages = (name for name of averages)
+Finally we'll create the ui.  We want the user to be able to choose
+a language, so we'll need a list of languages to select from.
 
-Whenever we mouseover the name of a language, call `showLanguageStar` to
-redraw the star.
+        language_list = (name for name of averages)
 
-        d3.select("body").append("ul").selectAll("li")
-            .data(languages)
+        languages = d3.select("body")
+            .append("ul").selectAll("li")
+            .data( language_list )
             .enter().append("li")
             .text((d) -> d)
-            .on "mouseover", showLanguageStar
+
+Whenever we mouseover the name of a language, call `showLanguageStar`
+to redraw the star.
+
+        languages.on "mouseover", showLanguageStar
 
 boilerplate
 -----------
