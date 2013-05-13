@@ -24,11 +24,17 @@
 
       
         
-        <p>The other day I came across <a href="http://blog.gmarceau.qc.ca/2009/05/speed-size-and-dependability-of.html" title="The speed, size and dependability of programming languages">this blog post</a> from
-Guillaume Marceau graphing data from the
+        <p>The other day I came across <a href="http://blog.gmarceau.qc.ca/2009/05/speed-size-and-dependability-of.html" title="The speed, size and dependability of programming languages">this blog post</a> from Guillaume
+Marceau graphing benchmark speed and size data from the
 <a href="http://benchmarksgame.alioth.debian.org/" title="The Computer Language Benchmarks Game">Computer Language Benchmarks Game</a>.</p>
-<p>My first thought was, &quot;cool&quot;.  My next was, &quot;I should update
-this with recent data, and use d3&quot;.</p>
+<p>Given my interests in data visualization and programming languages,
+it is no surprise that these graphs tickled me.  They are, however,
+a little old, and Marceau&#39;s post leaves a few outstanding questions,
+so I thought I&#39;d try to recreate his findings.  And we may as well
+use <a href="http://www.d3js.org" title="D3: Data-Driven Documents">d3</a> for it.</p>
+<p>In this post I&#39;ll walk through building only one of Marceau&#39;s graphs,
+but if you&#39;re interested checkout <a href="http://couchand.github.io/language-viz" title="language graph examples">this page</a> for more.  Also
+feel free to poke around the <a href="http://www.github.com/couchand/language-viz" title="language-viz GitHub repository">git repo</a> for this project.</p>
 
         
           <div class='highlight'><pre>width = <span class="number">250</span>
@@ -37,8 +43,8 @@ margin = <span class="number">100</span></pre></div>
         
       
         
-        <p>So let&#39;s navigate over to the Benchmarks Game website and download
-the summary data.</p>
+        <p>Let&#39;s navigate over to the Benchmarks Game website and download
+the summary data.  You can find it <a href="http://benchmarksgame.alioth.debian.org/u32/summarydata.php" title="Computer Language Benchmarks Game summary data">here</a>.</p>
 
         
           <div class='highlight'><pre>d3.csv <span class="string">"data.csv"</span>, (data) -&gt;
@@ -63,18 +69,14 @@ enough to ask d3 to do this conversion for us.</p>
         .key((d) -&gt; d.name)
         .rollup (v) -&gt;
             <span class="string">"cpu(s)"</span>:  d3.min v, (d) -&gt; d[<span class="string">"cpu(s)"</span>]
-            <span class="string">"size(B)"</span>: d3.min v, (d) -&gt; d[<span class="string">"size(B)"</span>]</pre></div>
-        
-      
-        
-        <p>Calculate the minimum size and time for each benchmark.</p>
+            <span class="string">"size(B)"</span>: d3.min v, (d) -&gt; d[<span class="string">"size(B)"</span>]
 
-        
-          <div class='highlight'><pre>    mins = best.map data</pre></div>
+    mins = best.map data</pre></div>
         
       
         
-        <p>Then scale the data accordingly.</p>
+        <p>Calculate the minimum size and time for each benchmark, then scale
+the data accordingly.</p>
 
         
           <div class='highlight'><pre>    <span class="keyword">for</span> d <span class="keyword">in</span> data
@@ -84,7 +86,11 @@ enough to ask d3 to do this conversion for us.</p>
       
         
         <p>Great.  Let&#39;s draw a basic scatter plot.  We&#39;ll scale the domain
-manually to exclude the outliers.</p>
+manually to exclude the outliers.  Framing our plot this way
+highlights an interesting fact about this data: other than those
+outliers, the largest programs only take about six times the space
+of the most optimum.  However, the slowest programs run for five
+thousand times longer than the fastest.</p>
 
         
           <div class='highlight'><pre>    scaleX = d3.scale.sqrt().domain([<span class="number">0</span>, <span class="number">5000</span>]).rangeRound([<span class="number">0</span>,  width])
@@ -95,13 +101,14 @@ manually to exclude the outliers.</p>
         
       
         
-        <p>Now add a dot for each benchmark data point.</p>
+        <p>Now add a dot for each benchmark data point.  The x-coordinate is
+the benchmark relative speed, and the y-coordinate the relative size.</p>
 
         
           <div class='highlight'><pre>    focus = createCanvas()
 
     focus.selectAll(<span class="string">".benchmark"</span>)
-        .data(data)
+        .data( data )
         .enter().append(<span class="string">"circle"</span>)
         .attr(<span class="string">"class"</span>, <span class="string">"benchmark"</span>)
         .attr(<span class="string">"r"</span>, <span class="number">2</span>)
@@ -165,11 +172,11 @@ svg group and move it to the average position.</p>
 selected language.</p>
 
         
-          <div class='highlight'><pre>        star.selectAll(<span class="string">"path"</span>)
+          <div class='highlight'><pre>        star.selectAll(<span class="string">"line"</span>)
             .data( benchmarks[lang] )
-            .enter().append(<span class="string">"path"</span>)
-            .attr <span class="string">"d"</span>, (d) -&gt;
-                <span class="string">"M 0,0 L <span class="subst">#{x(d) - x(avg)}</span>,<span class="subst">#{y(d) - y(avg)}</span>"</span></pre></div>
+            .enter().append(<span class="string">"line"</span>)
+            .attr(<span class="string">"x2"</span>, (d) -&gt; x(d) - x(avg))
+            .attr(<span class="string">"y2"</span>, (d) -&gt; y(d) - y(avg))</pre></div>
         
       
         

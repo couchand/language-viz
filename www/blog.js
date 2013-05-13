@@ -68,8 +68,10 @@
       avg = averages[lang];
       focus.select(".star").remove();
       star = focus.append("g").attr("class", "star").attr("transform", "translate(" + (x(avg)) + "," + (y(avg)) + ")");
-      return star.selectAll("path").data(benchmarks[lang]).enter().append("path").attr("d", function(d) {
-        return "M 0,0 L " + (x(d) - x(avg)) + "," + (y(d) - y(avg));
+      return star.selectAll("line").data(benchmarks[lang]).enter().append("line").attr("x2", function(d) {
+        return x(d) - x(avg);
+      }).attr("y2", function(d) {
+        return y(d) - y(avg);
       });
     };
     showLanguageStar("JavaScript V8");
