@@ -1,21 +1,35 @@
 d3 language graphs a la marceau
 ===============================
 
-The other day I came across [this blog post][marceau] from
-Guillaume Marceau graphing data from the
+The other day I came across [this blog post][marceau] from Guillaume
+Marceau graphing benchmark speed and size data from the
 [Computer Language Benchmarks Game][benchmarks].
+
+Given my interests in data visualization and programming languages,
+it is no surprise that these graphs tickled me.  They are, however,
+a little old, and Marceau's post leaves a few outstanding questions,
+so I thought I'd try to recreate his findings.  And we may as well
+use [d3][d3] for it.
+
 [marceau]: http://blog.gmarceau.qc.ca/2009/05/speed-size-and-dependability-of.html "The speed, size and dependability of programming languages"
 [benchmarks]: http://benchmarksgame.alioth.debian.org/ "The Computer Language Benchmarks Game"
+[d3]: http://www.d3js.org "D3: Data-Driven Documents"
 
-My first thought was, "cool".  My next was, "I should update
-this with recent data, and use d3".
+In this post I'll walk through building only one of Marceau's graphs,
+but if you're interested checkout [this page][moreviz] for more.  Also
+feel free to poke around the [git repo][github] for this project.
+
+[moreviz]: http://couchand.github.io/language-viz "language graph examples"
+[github]: http://www.github.com/couchand/language-viz "language-viz GitHub repository"
 
     width = 250
     height = 250
     margin = 100
 
-So let's navigate over to the Benchmarks Game website and download
-the summary data.
+Let's navigate over to the Benchmarks Game website and download
+the summary data.  You can find it [here][data].
+
+[data]: http://benchmarksgame.alioth.debian.org/u32/summarydata.php "Computer Language Benchmarks Game summary data"
 
     d3.csv "data.csv", (data) ->
         for d in data
@@ -36,18 +50,21 @@ enough to ask d3 to do this conversion for us.
                 "cpu(s)":  d3.min v, (d) -> d["cpu(s)"]
                 "size(B)": d3.min v, (d) -> d["size(B)"]
 
-Calculate the minimum size and time for each benchmark.
-
         mins = best.map data
 
-Then scale the data accordingly.
+Calculate the minimum size and time for each benchmark, then scale
+the data accordingly.
 
         for d in data
             d["cpu(s)"]  = d["cpu(s)"]  / mins[d.name]["cpu(s)"]
             d["size(B)"] = d["size(B)"] / mins[d.name]["size(B)"]
 
 Great.  Let's draw a basic scatter plot.  We'll scale the domain
-manually to exclude the outliers.
+manually to exclude the outliers.  Framing our plot this way
+highlights an interesting fact about this data: other than those
+outliers, the largest programs only take about six times the space
+of the most optimum.  However, the slowest programs run for five
+thousand times longer than the fastest.
 
         scaleX = d3.scale.sqrt().domain([0, 5000]).rangeRound([0,  width])
         scaleY = d3.scale.sqrt().domain([1,    6]).rangeRound([height, 0])
@@ -55,12 +72,13 @@ manually to exclude the outliers.
         x = (d) -> scaleX d["cpu(s)"]
         y = (d) -> scaleY d["size(B)"]
 
-Now add a dot for each benchmark data point.
+Now add a dot for each benchmark data point.  The x-coordinate is
+the benchmark relative speed, and the y-coordinate the relative size.
 
         focus = createCanvas()
 
         focus.selectAll(".benchmark")
-            .data(data)
+            .data( data )
             .enter().append("circle")
             .attr("class", "benchmark")
             .attr("r", 2)
