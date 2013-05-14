@@ -11,16 +11,23 @@ a little old, and Marceau's post leaves a few outstanding questions,
 so I thought I'd try to recreate his findings.  And we may as well
 use [d3][d3] for it.
 
+Like many d3 tutorials, we'll be using [coffee script][coffee] for
+its simplicity.  To translate to javascript, just add a ton of
+parentheses, curly braces, and semicolons.
+
 [marceau]: http://blog.gmarceau.qc.ca/2009/05/speed-size-and-dependability-of.html "The speed, size and dependability of programming languages"
 [benchmarks]: http://benchmarksgame.alioth.debian.org/ "The Computer Language Benchmarks Game"
 [d3]: http://www.d3js.org "D3: Data-Driven Documents"
+[coffee]: http://coffeescript.org/ "CoffeeScript"
 
 In this post I'll walk through building only one of Marceau's graphs,
 but if you're interested checkout [this page][moreviz] for more.  Also
-feel free to poke around the [git repo][github] for this project.
+feel free to poke around the [git repo][github] for this project,
+including the [literate coffeescript version][litcoffee] of this post..
 
 [moreviz]: http://couchand.github.io/language-viz "language graph examples"
 [github]: http://www.github.com/couchand/language-viz "language-viz GitHub repository"
+[litcoffee]: https://github.com/couchand/language-viz/blob/master/src/blog.litcoffee "langauge graph tutorial literate coffeescript"
 
     width = 250
     height = 250
