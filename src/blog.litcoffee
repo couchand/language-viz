@@ -23,7 +23,7 @@ parentheses, curly braces, and semicolons.
 In this post I'll walk through building only one of Marceau's graphs,
 but if you're interested checkout [this page][moreviz] for more.  Also
 feel free to poke around the [git repo][github] for this project,
-including the [literate coffeescript version][litcoffee] of this post..
+including the [literate coffeescript version][litcoffee] of this post.
 
 [moreviz]: http://couchand.github.io/language-viz "language graph examples"
 [github]: http://www.github.com/couchand/language-viz "language-viz GitHub repository"
