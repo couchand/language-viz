@@ -13,7 +13,7 @@ use [d3][d3] for it.
 
 Like many d3 tutorials, we'll be using [coffee script][coffee] for
 its simplicity.  To translate to javascript, just add a ton of
-parentheses, curly braces, and semicolons.
+parentheses, curly braces and semicolons.
 
 [marceau]: http://blog.gmarceau.qc.ca/2009/05/speed-size-and-dependability-of.html "The speed, size and dependability of programming languages"
 [benchmarks]: http://benchmarksgame.alioth.debian.org/ "The Computer Language Benchmarks Game"
@@ -173,9 +173,11 @@ has become one of the fastest languages in the rankings while
 remaining expressive.  I'd be intrigued to see CoffeeScript on here.
 
 There have been a few major langauge movements.  Java 7 seems to have
-lost the edge that Java 6 had.  Haskell, Fortran, and Ada have all
-moved into the fastest column.  Otherwise things are largely how they
-were three years ago.
+lost the edge that Java 6 had.  Haskell, Fortran and Ada have all
+moved into the fastest column.  I understand developers working on
+improving the Haskell programs, but I'm curious who's hacking at these
+Fortran and Ada benchmark programs. Otherwise things are largely how
+they were three years ago.
 
 Check out <http://couchand.github.io/language-viz/> for more of
 Marceau's visualizations recreated.
