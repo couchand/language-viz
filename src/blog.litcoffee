@@ -169,6 +169,19 @@ to redraw the star.
 
         languages.on "mouseover", showLanguageStar
 
+Now we can answer a few questions Marceau left.  Would JavaScript V8
+maintain its position?  Yes, not just maintained, but improved.  It
+has become one of the fastest languages in the rankings while
+remaining expressive.  I'd be intrigued to see CoffeeScript on here.
+
+There have been a few major langauge movements.  Java 7 seems to have
+lost the edge that Java 6 had.  Haskell, Fortran, and Ada have all
+moved into the fastest column.  Otherwise things are largely how they
+were three years ago.
+
+Check out <http://couchand.github.io/language-viz/> for more of
+Marceau's visualizations recreated.
+
 boilerplate
 -----------
 
