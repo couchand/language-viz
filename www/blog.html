@@ -42,6 +42,9 @@ it is no surprise that these graphs tickled me.  They are, however,
 a little old, and Marceau&#39;s post leaves a few outstanding questions,
 so I thought I&#39;d try to recreate his findings.  And we may as well
 use <a href="http://www.d3js.org" title="D3: Data-Driven Documents">d3</a> for it.</p>
+<p>Like many d3 tutorials, we&#39;ll be using <a href="http://coffeescript.org/" title="CoffeeScript">coffee script</a> for
+its simplicity.  To translate to javascript, just add a ton of
+parentheses, curly braces and semicolons.</p>
 <p>In this post I&#39;ll walk through building only one of Marceau&#39;s graphs,
 but if you&#39;re interested checkout <a href="http://couchand.github.io/language-viz" title="language graph examples">this page</a> for more.  Also
 feel free to poke around the <a href="http://www.github.com/couchand/language-viz" title="language-viz GitHub repository">git repo</a> for this project.</p>
@@ -365,10 +368,22 @@ to redraw the star.</p>
         <li id="section-19">
             <div class="annotation">
               
-              <div class="pilwrap for-h2">
+              <div class="pilwrap ">
                 <a class="pilcrow" href="#section-19">&#182;</a>
               </div>
-              <h2>boilerplate</h2>
+              <p>Now we can answer a few questions Marceau left.  Would JavaScript V8
+maintain its position?  Yes, not just maintained, but improved.  It
+has become one of the fastest languages in the rankings while
+remaining expressive.  I&#39;d be intrigued to see CoffeeScript on here.</p>
+<p>There have been a few major langauge movements.  Java 7 seems to have
+lost the edge that Java 6 had.  Haskell, Fortran and Ada have all
+moved into the fastest column.  I understand developers working on
+improving the Haskell programs, but I&#39;m curious who&#39;s hacking at these
+Fortran and Ada benchmark programs. Otherwise things are largely how
+they were three years ago.</p>
+<p>Check out <a href="http://couchand.github.io/language-viz/">http://couchand.github.io/language-viz/</a> for more of
+Marceau&#39;s visualizations recreated.</p>
+<h2>boilerplate</h2>
 
             </div>
             
